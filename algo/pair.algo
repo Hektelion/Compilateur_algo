@@ -1,0 +1,13 @@
+Algorithme
+  Role : Afficher les valeurs pairs entre 0 et n.
+  Declaration
+    n, i : entier
+  Debut
+    afficher("Saisir une valeur entiere: ")
+    lire(n)
+    pour i de 0 a n faire
+      si i % 2 == 0 alors
+        afficher("->  est une valeur paire. \n")
+      fsi
+    fpour
+  Fin

@@ -1,0 +1,3 @@
+afficher("testn")
+afficher("->  est une valeur paire")
+afficher("PGCD: ", p, "a")

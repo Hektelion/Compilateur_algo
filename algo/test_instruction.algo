@@ -1,0 +1,10 @@
+Algorithme <test>
+    Role : algorithme test
+    Declaration
+
+    Debut
+        afficher()
+        afficher(var1)
+        afficher("test")
+        afficher('\c')
+    Fin

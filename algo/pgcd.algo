@@ -1,0 +1,36 @@
+Algorithme
+  Role : Calculer le pgcd de deux nombres entiers a et b.
+  Declaration
+    a, b : entier # valeurs lues au clavier
+    tmp, c : entier
+    p : entier    # pgdc(a, b)
+  Debut
+    # Lecture de a et b.
+    afficher("Saisir deux valeurs entieres a et b")
+    lire(a, b)
+
+    # Ordonner a et b (a >= b)
+    si a < b alors
+      tmp = a
+      a = b
+      b = tmp
+    fsi
+  
+    # Calculer la difference c = a - b
+    c = a - b     
+    tant que c != 0 faire
+      # Mettre a jour a
+      a = c
+      # Ordonner a et b (a >= b)
+      si a < b alors
+        tmp = a
+        a = b
+        b = tmp
+      fsi
+      # Calculer a nouveau la difference c = a - b
+      c = a - b
+    ftant
+    p = b
+    afficher("PGCD", p, "n")
+  Fin
+

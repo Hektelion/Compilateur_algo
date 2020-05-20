@@ -1,0 +1,11 @@
+Algorithme <test>
+    Role : algorithme test
+    Declaration
+        a : entier
+        var2 : reel
+        var3 : caractere
+        var4 : booleen
+        var5 : chaine
+    Debut
+    
+    Fin
