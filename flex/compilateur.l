@@ -37,7 +37,6 @@ type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 <PROGRAM_ZONE,WHILE_DEF,IF_DEF>">="				{ printf("opérateur booleen : %s\n", yytext); }
 <PROGRAM_ZONE,WHILE_DEF,IF_DEF>">"				{ printf("opérateur booleen : %s\n", yytext); }
 <PROGRAM_ZONE,WHILE_DEF,IF_DEF>"<"				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"="				{ printf("opérateur arithmétique : %s\n", yytext); }
 <PROGRAM_ZONE,WHILE_DEF,IF_DEF>"+"				{ printf("opérateur arithmétique : %s\n", yytext); }
 <PROGRAM_ZONE,WHILE_DEF,IF_DEF>"-"				{ printf("opérateur arithmétique : %s\n", yytext); }
 <PROGRAM_ZONE,WHILE_DEF,IF_DEF>"*"				{ printf("opérateur arithmétique : %s\n", yytext); }
@@ -72,10 +71,12 @@ type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 <PROGRAM_ZONE>"Fin"				{ printf("Sortie du programme\n"); BEGIN(INITIAL); }
 <PROGRAM_ZONE>"pour"			{ printf("debut pour : %s\n", yytext); BEGIN(FOR_DEF); }
 <PROGRAM_ZONE>"tant"[ ]*"que"	{ printf("debut tant que : %s\n", yytext); BEGIN(WHILE_DEF); }
-<PROGRAM_ZONE>"si"				{ printf("debut si : %s\n", yytext); }
+<PROGRAM_ZONE>"sinon"			{ printf("debut sinon : %s\n", yytext); }
+<PROGRAM_ZONE>"si"				{ printf("debut si : %s\n", yytext); BEGIN(IF_DEF); }
 <PROGRAM_ZONE>"fpour"			{ printf("fin de pour\n"); }
 <PROGRAM_ZONE>"ftant"			{ printf("fin de tant que\n"); }
 <PROGRAM_ZONE>"fsi"				{ printf("fin de si\n"); }
+<PROGRAM_ZONE>"="				{ printf("affectation : %s\n", yytext); }
 <PROGRAM_ZONE>"("				{ printf("Debut arguments : %s\n", yytext); BEGIN(INSTRUCTION_ZONE); }
 <PROGRAM_ZONE>{identifiant}		{ printf("identifiant : %s\n", yytext); }
 <PROGRAM_ZONE>{commentaire}		{ printf("commentaire dans le programme ignorée : %s\n", yytext); }
@@ -88,22 +89,25 @@ type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 <INSTRUCTION_ZONE>")"			{ printf("Fin arguments : %s\n", yytext); BEGIN(PROGRAM_ZONE); }
 <INSTRUCTION_ZONE>[ ]			{  }
 
-<WHILE_DEF>"faire"				{ printf("fin definition tant que : %s\n", yytext); BEGIN(PROGRAM_ZONE); }
+<WHILE_DEF>"faire"				{ printf("mot clé : %s\n", yytext); }
 <WHILE_DEF>{identifiant}		{ printf("identifiant : %s\n", yytext); }
 <WHILE_DEF>{nombre}				{ printf("nombre : %s\n", yytext); }
 <WHILE_DEF>[ ]					{  }
+<WHILE_DEF>\n					{ printf("fin definition tant que\n"); BEGIN(PROGRAM_ZONE);  }
 
 <FOR_DEF>("allant"[ ]*"de")		{ printf("mot clé : %s\n", yytext); }
 <FOR_DEF>"a"					{ printf("mot clé : %s\n", yytext); }
-<FOR_DEF>"faire"				{ printf("fin definition pour : %s\n", yytext); BEGIN(PROGRAM_ZONE); }
+<FOR_DEF>"faire"				{ printf("mot clé : %s\n", yytext); }
 <FOR_DEF>{identifiant}			{ printf("identifiant : %s\n", yytext); }
 <FOR_DEF>{nombre}				{ printf("nombre : %s\n", yytext); }
 <FOR_DEF>[ ]					{  }
+<FOR_DEF>\n						{ printf("fin definition pour\n"); BEGIN(PROGRAM_ZONE);  }
 
-<IF_DEF>"alors"				{ printf("fin definition si : %s\n", yytext); BEGIN(PROGRAM_ZONE); }
-<IF_DEF>{identifiant}		{ printf("identifiant : %s\n", yytext); }
+<IF_DEF>"alors"					{ printf("mot clé : %s\n", yytext); }
+<IF_DEF>{identifiant}			{ printf("identifiant : %s\n", yytext); }
 <IF_DEF>{nombre}				{ printf("nombre : %s\n", yytext); }
-<IF_DEF>[ ]					{  }
+<IF_DEF>[ ]						{  }
+<IF_DEF>\n						{ printf("fin definition si\n"); BEGIN(PROGRAM_ZONE); }
 
 "\n"            				{  }
 " "|"\t"						{  }
