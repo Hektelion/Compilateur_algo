@@ -6,27 +6,33 @@
 
 void debug_token(int v_token);
 
+char chaine[128];
+ 
 %}
 
 %option noyywrap
 
-commentaire         ((\/\/|#).*)
+%x STRING
+
+commentaire         	((\/\/|#).*)
 
 %%
 
-{commentaire}                   { printf("commentaire ignorée : %s\n", yytext); }
+{commentaire}           { printf("commentaire ignorée : %s\n", yytext); }
 
-"\n"            				{ }
-" "|"\t"						{  }
-.								{ printf("Non reconnu : %s\n", yytext); }
-<<EOF>>							{ yyterminate(); }
+"\""                    { BEGIN(STRING); }
+<STRING>"\""            { BEGIN(INITIAL); }
+<STRING>.				{  }
+
+"\n"            		{  }
+" "|"\t"				{  }
+.						{ printf("Non reconnu : %s\n", yytext); }
+<<EOF>>					{ yyterminate(); }
 
 %%
 
 int main() {
     int token;
-
-    printf("#");
 
     do
 	{
