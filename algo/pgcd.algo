@@ -1,4 +1,4 @@
-Algorithme
+Algorithme pgcd
   Role : Calculer le pgcd de deux nombres entiers a et b.
   Declaration
     a, b : entier # valeurs lues au clavier

@@ -13,20 +13,26 @@ char chaine[128];
 %option noyywrap
 
 %x STRING
+%x DECL_ALGO
 
 commentaire         	((\/\/|#).*)
 
 %%
 
-{commentaire}           { printf("commentaire ignorée : %s\n", yytext); }
+{commentaire}           { /* printf("commentaire ignorée : %s\n", yytext); */ }
 
-"\""                    { BEGIN(STRING); }
-<STRING>"\""            { BEGIN(INITIAL); }
+"\""                    {  BEGIN(STRING); }
+<STRING>"\""            {  BEGIN(INITIAL); }
 <STRING>.				{  }
+
+"Algorithme"			{ BEGIN(DECL_ALGO); }
+<DECL_ALGO>[ ]			{  }
+<DECL_ALGO>.*			{ printf("Algorithme : %s\n", yytext); }
+<DECL_ALGO>\n			{ BEGIN(INITIAL); }
 
 "\n"            		{  }
 " "|"\t"				{  }
-.						{ printf("Non reconnu : %s\n", yytext); }
+.						{ /* printf("Non reconnu : %s\n", yytext); */ }
 <<EOF>>					{ yyterminate(); }
 
 %%
