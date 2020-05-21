@@ -1,0 +1,9 @@
+Algorithme
+  Role : Afficher les valeurs pairs entre 0 et n.
+  Declaration
+    n, i : entier
+  Debut
+    tant que i < 2 * 5 faire
+
+    fpour
+Fin
