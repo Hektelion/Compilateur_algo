@@ -15,8 +15,10 @@ char *chaine;
 %x STRING
 %x DECL_ALGO
 %x DEF_ROLE
+%x DECLARE_ZONE
 
 commentaire         	((\/\/|#).*)
+type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 
 %%
 
@@ -36,6 +38,16 @@ commentaire         	((\/\/|#).*)
 <DEF_ROLE>[ ]				{  }
 <DEF_ROLE>.*				{ printf("Role : %s\n", yytext); }
 <DEF_ROLE>\n				{ BEGIN(INITIAL); }
+
+"Declaration"				{ printf("Entrer dans la zone de déclaration\n"); BEGIN(DECLARE_ZONE); }
+<DECLARE_ZONE>"Debut"		{ printf("Sortie de la zone de déclaration\n"); BEGIN(INITIAL); }
+<DECLARE_ZONE>{commentaire}	{ /* printf("commentaire dans la zone de declaration ignorée : %s\n", yytext); */ }
+<DECLARE_ZONE>[ ]			{  }
+<DECLARE_ZONE>\n			{ printf("nouvelle variable : "); }
+<DECLARE_ZONE>":"			{ printf(" -> "); }
+<DECLARE_ZONE>","			{ printf(" ; "); }
+<DECLARE_ZONE>{type}		{ printf("%s\n", yytext); }
+<DECLARE_ZONE>[a-z|A-Z|_]*	{printf("%s", yytext); }
 
 "\n"            			{  }
 " "|"\t"					{  }
