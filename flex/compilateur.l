@@ -16,43 +16,77 @@ char *chaine;
 %x DECL_ALGO
 %x DEF_ROLE
 %x DECLARE_ZONE
+%x PROGRAM_ZONE
+%x INSTRUCTION_ZONE
 
 commentaire         	((\/\/|#).*)
+identifiant				[a-z|A-Z][a-z|A-Z|_]*
 type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 
 %%
 
-{commentaire}           	{ /* printf("commentaire ignorée : %s\n", yytext); */ }
+{commentaire}           		{ /* printf("commentaire ignorée : %s\n", yytext); */ }
 
-"\""                    	{  BEGIN(STRING); }
-<STRING>"\""            	{  BEGIN(INITIAL); }
-<STRING>.					{  }
+<INITIAL,INSTRUCTION_ZONE,PROGRAM_ZONE>"\""      { printf("chaine de caracteres : \""); BEGIN(STRING); }
+<STRING>"\""            		{ printf("\"\n"); BEGIN(INSTRUCTION_ZONE); }
+<STRING>.						{ printf("%s", yytext); }
 
-"Algorithme"				{ BEGIN(DECL_ALGO); }
-<DECL_ALGO>[ ]				{  }
-<DECL_ALGO>.*				{ printf("Algorithme : %s\n", yytext); }
-<DECL_ALGO>\n				{ BEGIN(INITIAL); }
+"Algorithme"					{ BEGIN(DECL_ALGO); }
+<DECL_ALGO>[ ]					{  }
+<DECL_ALGO>.*					{ printf("Algorithme : %s\n", yytext); }
+<DECL_ALGO>\n					{ BEGIN(INITIAL); }
 
-"Role"						{ BEGIN(DEF_ROLE); }
-<DEF_ROLE>":"				{  }
-<DEF_ROLE>[ ]				{  }
-<DEF_ROLE>.*				{ printf("Role : %s\n", yytext); }
-<DEF_ROLE>\n				{ BEGIN(INITIAL); }
+"Role"							{ BEGIN(DEF_ROLE); }
+<DEF_ROLE>":"					{  }
+<DEF_ROLE>.*					{ printf("Role : %s\n", yytext); }
+<DEF_ROLE>\n					{ BEGIN(INITIAL); }
 
-"Declaration"				{ printf("Entrer dans la zone de déclaration\n"); BEGIN(DECLARE_ZONE); }
-<DECLARE_ZONE>"Debut"		{ printf("Sortie de la zone de déclaration\n"); BEGIN(INITIAL); }
-<DECLARE_ZONE>{commentaire}	{ /* printf("commentaire dans la zone de declaration ignorée : %s\n", yytext); */ }
-<DECLARE_ZONE>[ ]			{  }
-<DECLARE_ZONE>\n			{ printf("nouvelle variable : "); }
-<DECLARE_ZONE>":"			{ printf(" -> "); }
-<DECLARE_ZONE>","			{ printf(" ; "); }
-<DECLARE_ZONE>{type}		{ printf("%s\n", yytext); }
-<DECLARE_ZONE>[a-z|A-Z|_]*	{printf("%s", yytext); }
+"Declaration"					{ printf("Entrer dans la zone de déclaration\n"); BEGIN(DECLARE_ZONE); }
+<DECLARE_ZONE>"Debut"			{ printf("Sortie de la zone de déclaration\n"); printf("Entrer dans le programme\n"); BEGIN(PROGRAM_ZONE); }
+<DECLARE_ZONE>{commentaire}		{ /* printf("commentaire dans la zone de declaration ignorée : %s\n", yytext); */ }
+<DECLARE_ZONE>":"				{ printf(" : "); }
+<DECLARE_ZONE>","				{ printf(" , "); }
+<DECLARE_ZONE>{type}			{ printf("%s\n", yytext); }
+<DECLARE_ZONE>{identifiant}		{printf("%s", yytext); }
+<DECLARE_ZONE>[ ]				{  }
+<DECLARE_ZONE>.					{ printf("Non reconnu dans la zone de declaration : %s\n", yytext); }
+<DECLARE_ZONE>\n				{ printf("declaration"); }
 
-"\n"            			{  }
-" "|"\t"					{  }
-.							{ /* printf("Non reconnu : %s\n", yytext); */ }
-<<EOF>>						{ yyterminate(); }
+<PROGRAM_ZONE>"Fin"				{ printf("Sortie du programme\n"); BEGIN(INITIAL); }
+<PROGRAM_ZONE>"pour"			{ printf("debut d'une structure : %s\n", yytext); }
+<PROGRAM_ZONE>"tant"[ ]*"que"	{ printf("debut d'une structure : %s\n", yytext); }
+<PROGRAM_ZONE>"si"				{ printf("debut d'une structure : %s\n", yytext); }
+<PROGRAM_ZONE>"fpour"			{ printf("fin de pour\n"); }
+<PROGRAM_ZONE>"ftant"			{ printf("fin de tant que\n"); }
+<PROGRAM_ZONE>"fsi"				{ printf("fin de si\n"); }
+<PROGRAM_ZONE>"("				{ printf("Debut arguments : %s\n", yytext); BEGIN(INSTRUCTION_ZONE); }
+<PROGRAM_ZONE>"=="				{ printf("opérateur booleen : %s\n", yytext); }
+<PROGRAM_ZONE>"!="				{ printf("opérateur booleen : %s\n", yytext); }
+<PROGRAM_ZONE>"<="				{ printf("opérateur booleen : %s\n", yytext); }
+<PROGRAM_ZONE>">="				{ printf("opérateur booleen : %s\n", yytext); }
+<PROGRAM_ZONE>">"				{ printf("opérateur booleen : %s\n", yytext); }
+<PROGRAM_ZONE>"<"				{ printf("opérateur booleen : %s\n", yytext); }
+<PROGRAM_ZONE>"="				{ printf("opérateur arithmétique : %s\n", yytext); }
+<PROGRAM_ZONE>"+"				{ printf("opérateur arithmétique : %s\n", yytext); }
+<PROGRAM_ZONE>"-"				{ printf("opérateur arithmétique : %s\n", yytext); }
+<PROGRAM_ZONE>"*"				{ printf("opérateur arithmétique : %s\n", yytext); }
+<PROGRAM_ZONE>"/"				{ printf("opérateur arithmétique : %s\n", yytext); }
+<PROGRAM_ZONE>"%"				{ printf("opérateur arithmétique : %s\n", yytext); }
+<PROGRAM_ZONE>{identifiant}		{ printf("identifiant : %s\n", yytext); }
+<PROGRAM_ZONE>{commentaire}		{ printf("commentaire dans le programme ignorée : %s\n", yytext); }
+<PROGRAM_ZONE>[ ]				{  }
+<PROGRAM_ZONE>.					{ printf("[ATTENTION] Non reconnu dans le programme : %s\n", yytext); }
+<PROGRAM_ZONE>\n				{  }
+
+<INSTRUCTION_ZONE>{identifiant}	{ printf("identifiant en parametre : %s\n", yytext); } /*ajouter nombre*/
+<INSTRUCTION_ZONE>","			{ printf(" , \n"); }
+<INSTRUCTION_ZONE>")"			{ printf("Fin arguments : %s\n", yytext); BEGIN(PROGRAM_ZONE); }
+<INSTRUCTION_ZONE>[ ]			{  }
+
+"\n"            				{  }
+" "|"\t"						{  }
+.								{ /* printf("Non reconnu : %s\n", yytext); */ }
+<<EOF>>							{ yyterminate(); }
 
 %%
 
