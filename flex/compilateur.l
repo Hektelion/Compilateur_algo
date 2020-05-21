@@ -6,7 +6,7 @@
 
 void debug_token(int v_token);
 
-char chaine[128];
+char *chaine;
  
 %}
 
@@ -14,26 +14,33 @@ char chaine[128];
 
 %x STRING
 %x DECL_ALGO
+%x DEF_ROLE
 
 commentaire         	((\/\/|#).*)
 
 %%
 
-{commentaire}           { /* printf("commentaire ignorée : %s\n", yytext); */ }
+{commentaire}           	{ /* printf("commentaire ignorée : %s\n", yytext); */ }
 
-"\""                    {  BEGIN(STRING); }
-<STRING>"\""            {  BEGIN(INITIAL); }
-<STRING>.				{  }
+"\""                    	{  BEGIN(STRING); }
+<STRING>"\""            	{  BEGIN(INITIAL); }
+<STRING>.					{  }
 
-"Algorithme"			{ BEGIN(DECL_ALGO); }
-<DECL_ALGO>[ ]			{  }
-<DECL_ALGO>.*			{ printf("Algorithme : %s\n", yytext); }
-<DECL_ALGO>\n			{ BEGIN(INITIAL); }
+"Algorithme"				{ BEGIN(DECL_ALGO); }
+<DECL_ALGO>[ ]				{  }
+<DECL_ALGO>.*				{ printf("Algorithme : %s\n", yytext); }
+<DECL_ALGO>\n				{ BEGIN(INITIAL); }
 
-"\n"            		{  }
-" "|"\t"				{  }
-.						{ /* printf("Non reconnu : %s\n", yytext); */ }
-<<EOF>>					{ yyterminate(); }
+"Role"						{ BEGIN(DEF_ROLE); }
+<DEF_ROLE>":"				{  }
+<DEF_ROLE>[ ]				{  }
+<DEF_ROLE>.*				{ printf("Role : %s\n", yytext); }
+<DEF_ROLE>\n				{ BEGIN(INITIAL); }
+
+"\n"            			{  }
+" "|"\t"					{  }
+.							{ /* printf("Non reconnu : %s\n", yytext); */ }
+<<EOF>>						{ yyterminate(); }
 
 %%
 
