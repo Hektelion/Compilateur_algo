@@ -3,7 +3,7 @@ Algorithme
   Declaration
     n, i : entier
   Debut
-    pour i allant de 0 a n faire
+    pour i allant de 0 a n par pas de 10 faire
     
     fpour
 Fin

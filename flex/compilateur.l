@@ -4,9 +4,11 @@
 
 #include <constant.h>
 
+void indent(int v_token);
 void debug_token(int v_token);
 
-char *chaine;
+char chaine[1024];
+int current_indent=0;
  
 %}
 
@@ -17,102 +19,99 @@ char *chaine;
 %x DEF_ROLE
 %x DECLARE_ZONE
 %x PROGRAM_ZONE
-%x INSTRUCTION_ZONE
 %x FOR_DEF
 %x WHILE_DEF
-%x IF_DEF
+%x IF_DEF_ZONE
 
 commentaire         	((\/\/|#).*)
 identifiant				[a-z|A-Z][a-z|A-Z|_]*
-nombre					[0-9]+
+nombre					-[0-9]+|[0-9]+
 type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
+operateur_booleen		("=="|"!="|">"|"<"|">="|"<=")
+operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 
 %%
 
-{commentaire}           		{ /* printf("commentaire ignorée : %s\n", yytext); */ }
+<DECLARE_ZONE,INITIAL>{commentaire}	{
+	/* printf("commentaire ignorée : %s\n", yytext); */
+}
 
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"=="				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"!="				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"<="				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>">="				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>">"				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"<"				{ printf("opérateur booleen : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"+"				{ printf("opérateur arithmétique : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"-"				{ printf("opérateur arithmétique : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"*"				{ printf("opérateur arithmétique : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"/"				{ printf("opérateur arithmétique : %s\n", yytext); }
-<PROGRAM_ZONE,WHILE_DEF,IF_DEF>"%"				{ printf("opérateur arithmétique : %s\n", yytext); }
+<INITIAL>"\"" 										{ /* concatené les éléments */
+														BEGIN(STRING);
+														memset(chaine, 0, strlen(chaine));
+														strcat(chaine, "\""); }
+<STRING>"\""            							{ 	
+														BEGIN(INITIAL);
+														strcat(chaine, "\"");
+														yytext = chaine;
+													  	return(TOK_STRING);
+													}
+<STRING>.											{ 
+														strcat(chaine, yytext);
+													}
 
-<INITIAL,INSTRUCTION_ZONE,PROGRAM_ZONE>"\""      { printf("chaine de caracteres : \""); BEGIN(STRING); }
-<STRING>"\""            		{ printf("\"\n"); BEGIN(INSTRUCTION_ZONE); }
-<STRING>.						{ printf("%s", yytext); }
+"Algorithme"										{ BEGIN(DECL_ALGO); return(TOK_ALGO); }
+<DECL_ALGO>(" "|"\t")								{  }
+<DECL_ALGO>.*										{ return(TOK_ALGO_NAME); }
+<DECL_ALGO>\n										{ BEGIN(INITIAL); }
 
-"Algorithme"					{ BEGIN(DECL_ALGO); }
-<DECL_ALGO>[ ]					{  }
-<DECL_ALGO>.*					{ printf("Algorithme : %s\n", yytext); }
-<DECL_ALGO>\n					{ BEGIN(INITIAL); }
+"Role"												{ BEGIN(DEF_ROLE); return(TOK_ROLE); }
+<DEF_ROLE>":"										{ return(TOK_COMMA); }
+<DEF_ROLE>.*										{ return(TOK_ROLE_DESC); }
+<DEF_ROLE>\n										{ BEGIN(INITIAL); }
 
-"Role"							{ BEGIN(DEF_ROLE); }
-<DEF_ROLE>":"					{  }
-<DEF_ROLE>.*					{ printf("Role : %s\n", yytext); }
-<DEF_ROLE>\n					{ BEGIN(INITIAL); }
+<WHILE_DEF,FOR_DEF,IF_DEF_ZONE>{operateur_booleen}	{ return(TOK_OP); }
+{operateur_arithmetique}							{ return(TOK_OP); }
+"Declaration"										{ BEGIN(DECLARE_ZONE); return(TOK_DECLARE); }
 
-"Declaration"					{ printf("Entrer dans la zone de déclaration\n"); BEGIN(DECLARE_ZONE); }
-<DECLARE_ZONE>"Debut"			{ printf("Sortie de la zone de déclaration\n"); printf("Entrer dans le programme\n"); BEGIN(PROGRAM_ZONE); }
-<DECLARE_ZONE>{commentaire}		{ /* printf("commentaire dans la zone de declaration ignorée : %s\n", yytext); */ }
-<DECLARE_ZONE>":"				{ printf(" : "); }
-<DECLARE_ZONE>","				{ printf(" , "); }
-<DECLARE_ZONE>{type}			{ printf("%s\n", yytext); }
-<DECLARE_ZONE>{identifiant}		{printf("%s", yytext); }
-<DECLARE_ZONE>[ ]				{  }
-<DECLARE_ZONE>.					{ printf("Non reconnu dans la zone de declaration : %s\n", yytext); }
-<DECLARE_ZONE>\n				{  }
+<DECLARE_ZONE>"Debut"								{  BEGIN(INITIAL); return(TOK_BEGIN); }
+<DECLARE_ZONE>":"									{ return(TOK_COMMA); }
+<DECLARE_ZONE>","									{ return(TOK_COLON); }
+<DECLARE_ZONE>{type}								{ return(TOK_TYPE); }
+<DECLARE_ZONE>{identifiant}							{ return(TOK_ID); }
+<DECLARE_ZONE>(" "|"\t")							{  }
+<DECLARE_ZONE>.										{ printf("[ATTENTION] Non reconnu dans la zone de declaration : %s\n", yytext); }	/* gestion des erreurs */
+<DECLARE_ZONE>\n									{  }
 
-<PROGRAM_ZONE>"Fin"				{ printf("Sortie du programme\n"); BEGIN(INITIAL); }
-<PROGRAM_ZONE>"pour"			{ printf("debut pour : %s\n", yytext); BEGIN(FOR_DEF); }
-<PROGRAM_ZONE>"tant"[ ]*"que"	{ printf("debut tant que : %s\n", yytext); BEGIN(WHILE_DEF); }
-<PROGRAM_ZONE>"sinon"			{ printf("debut sinon : %s\n", yytext); }
-<PROGRAM_ZONE>"si"				{ printf("debut si : %s\n", yytext); BEGIN(IF_DEF); }
-<PROGRAM_ZONE>"fpour"			{ printf("fin de pour\n"); }
-<PROGRAM_ZONE>"ftant"			{ printf("fin de tant que\n"); }
-<PROGRAM_ZONE>"fsi"				{ printf("fin de si\n"); }
-<PROGRAM_ZONE>"="				{ printf("affectation : %s\n", yytext); }
-<PROGRAM_ZONE>"("				{ printf("Debut arguments : %s\n", yytext); BEGIN(INSTRUCTION_ZONE); }
-<PROGRAM_ZONE>{identifiant}		{ printf("identifiant : %s\n", yytext); }
-<PROGRAM_ZONE>{commentaire}		{ printf("commentaire dans le programme ignorée : %s\n", yytext); }
-<PROGRAM_ZONE>[ ]				{  }
-<PROGRAM_ZONE>.					{ printf("[ATTENTION] Non reconnu dans le programme : %s\n", yytext); }
-<PROGRAM_ZONE>\n				{  }
+"Fin"												{ return(TOK_END); }
+"pour"												{ BEGIN(FOR_DEF); return(TOK_FOR); }
+"tant"[ ]*"que"										{ BEGIN(WHILE_DEF); return(TOK_WHILE); }
+"sinon"												{ return(TOK_ELSE); }
+"si"												{ BEGIN(IF_DEF_ZONE); return(TOK_IF); }
+"fpour"												{ return(TOK_EIF); }
+"ftant"												{ return(TOK_EWHILE); }
+"fsi"												{ return(TOK_EIF); }
+"="													{ return(TOK_EQUAL); }
+"("													{ return(TOK_PARL); }
+","													{ return(TOK_COMMA); }
+")"													{ return(TOK_PARR); }
+{identifiant}										{ return(TOK_ID); }
+\n				{  }
 
-<INSTRUCTION_ZONE>{identifiant}	{ printf("identifiant en parametre : %s\n", yytext); } /*ajouter nombre*/
-<INSTRUCTION_ZONE>","			{ printf(" , \n"); }
-<INSTRUCTION_ZONE>")"			{ printf("Fin arguments : %s\n", yytext); BEGIN(PROGRAM_ZONE); }
-<INSTRUCTION_ZONE>[ ]			{  }
+<WHILE_DEF>"faire"									{ BEGIN(INITIAL); return(TOK_WHILE); }
+<WHILE_DEF>{identifiant}							{ return(TOK_ID); }
+<WHILE_DEF>{nombre}									{ return(TOK_INT); }
+<WHILE_DEF>[ ]										{  }
+<WHILE_DEF>\n										{  }
 
-<WHILE_DEF>"faire"				{ printf("mot clé : %s\n", yytext); }
-<WHILE_DEF>{identifiant}		{ printf("identifiant : %s\n", yytext); }
-<WHILE_DEF>{nombre}				{ printf("nombre : %s\n", yytext); }
-<WHILE_DEF>[ ]					{  }
-<WHILE_DEF>\n					{ printf("fin definition tant que\n"); BEGIN(PROGRAM_ZONE);  }
+<FOR_DEF>"par"[ ]*"pas"[ ]*"de"						{ return(TOK_BY_STEP); }
+<FOR_DEF>"de"										{ return(TOK_FROM); }
+<FOR_DEF>"a"										{ return(TOK_TO); }
+<FOR_DEF>"faire"									{ BEGIN(INITIAL); return(TOK_DO); }
+<FOR_DEF>{identifiant}								{ return(TOK_ID); }
+<FOR_DEF>{nombre}									{ return(TOK_INT); }
+<FOR_DEF>[ ]										{  }
+<FOR_DEF>\n											{  }
 
-<FOR_DEF>("allant"[ ]*"de")		{ printf("mot clé : %s\n", yytext); }
-<FOR_DEF>"a"					{ printf("mot clé : %s\n", yytext); }
-<FOR_DEF>"faire"				{ printf("mot clé : %s\n", yytext); }
-<FOR_DEF>{identifiant}			{ printf("identifiant : %s\n", yytext); }
-<FOR_DEF>{nombre}				{ printf("nombre : %s\n", yytext); }
-<FOR_DEF>[ ]					{  }
-<FOR_DEF>\n						{ printf("fin definition pour\n"); BEGIN(PROGRAM_ZONE);  }
+<IF_DEF_ZONE>"alors"								{ BEGIN(INITIAL); return(TOK_THEN); }
+<IF_DEF_ZONE>{identifiant}							{ return(TOK_ID); }
+<IF_DEF_ZONE>{nombre}								{ return(TOK_INT); }
+<IF_DEF_ZONE>[ ]									{  }
+<IF_DEF_ZONE>\n										{  }
 
-<IF_DEF>"alors"					{ printf("mot clé : %s\n", yytext); }
-<IF_DEF>{identifiant}			{ printf("identifiant : %s\n", yytext); }
-<IF_DEF>{nombre}				{ printf("nombre : %s\n", yytext); }
-<IF_DEF>[ ]						{  }
-<IF_DEF>\n						{ printf("fin definition si\n"); BEGIN(PROGRAM_ZONE); }
-
-"\n"            				{  }
-" "|"\t"						{  }
-.								{ /* printf("Non reconnu : %s\n", yytext); */ }
-<<EOF>>							{ yyterminate(); }
+" "|"\t"											{  }
+.													{ /* printf("Non reconnu : %s\n", yytext); */ }
+<<EOF>>												{ yyterminate(); }
 
 %%
 
@@ -122,13 +121,79 @@ int main() {
     do
 	{
 		token = yylex();
+		indent(token);
 		debug_token(token);
 	}
 	while(token != 0);
 
+	printf("\n");
+
     return 0;
 }
 
-void debug_token(int v_token) {
+void indent(int v_token) {
+	switch(v_token) {
+		case TOK_DECLARE:
+		case TOK_BEGIN:
+		case TOK_END:
+		case TOK_ELSE:
+		case TOK_THEN:
+		case TOK_DO:
+			current_indent++;
+			break;
 
+		case TOK_EIF:
+		case TOK_EFOR:
+		case TOK_EWHILE:
+			current_indent--;
+			break;
+	}
+	for(int i=0 ; i<current_indent ; i++) printf("\t");
+}
+
+void debug_token(int v_token) {
+	switch(v_token) {
+		case TOK_ALGO: printf("TOK_ALGO"); break;
+		case TOK_ALGO_NAME: printf("TOK_ALGO_NAME"); break;
+		case TOK_ROLE: printf("TOK_ROLE"); break;
+		case TOK_ROLE_DESC: printf("TOK_ROLE_DESC"); break;
+		case TOK_DECLARE: printf("TOK_DECLARE"); break;
+		case TOK_BEGIN: printf("TOK_BEGIN"); break;
+		case TOK_END: printf("TOK_END");  break;
+
+		case TOK_TYPE: printf("TOK_TYPE");  break;
+
+		case TOK_IF: printf("TOK_IF");  break;
+		case TOK_ELSE: printf("TOK_ELSE");  break;
+		case TOK_THEN: printf("TOK_THEN");  break;
+		case TOK_EIF: printf("TOK_EIF");  break;
+
+		case TOK_FOR: printf("TOK_FOR");  break;
+		case TOK_FROM: printf("TOK_FROM");  break;
+		case TOK_TO: printf("TOK_TO");  break;
+		case TOK_BY_STEP: printf("TOK_BY_STEP");  break;
+		case TOK_DO: printf("TOK_DO");  break;
+		case TOK_EFOR: printf("TOK_EFOR");  break;
+
+		case TOK_WHILE: printf("TOK_WHILE");  break;
+		case TOK_EWHILE: printf("TOK_EWHILE");  break;
+
+		case TOK_INT: printf("TOK_INT");  break;
+		case TOK_FLOAT: printf("TOK_FLOAT");  break;
+		case TOK_CHAR: printf("TOK_CHAR");  break;
+		case TOK_BOOL: printf("TOK_BOOL");  break;
+		case TOK_STRING: printf("TOK_STRING");  break;
+
+		case TOK_OP: printf("TOK_OP");  break;
+		case TOK_EQUAL: printf("TOK_EQUAL");  break;
+
+		case TOK_PARL: printf("TOK_PARL");  break;
+		case TOK_PARR: printf("TOK_PARR");  break;
+		case TOK_COLON: printf("TOK_COLON");  break;
+		case TOK_COMMA: printf("TOK_COMMA");  break;
+		case TOK_QUOTE: printf("TOK_QUOTE");  break;
+
+		case TOK_ID: printf("TOK_ID");  break;
+	}
+	printf(" : %s\n", yytext);
 }
