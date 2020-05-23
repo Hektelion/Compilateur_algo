@@ -927,297 +927,358 @@ case 2:
 YY_RULE_SETUP
 #line 39 "flex/compilateur.l"
 { /* concatené les éléments */
-														BEGIN(STRING);
-														memset(chaine, 0, strlen(chaine));
-														strcat(chaine, "\""); }
+	BEGIN(STRING);
+	memset(chaine, 0, strlen(chaine));
+	strcat(chaine, "\"");
+}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 43 "flex/compilateur.l"
-{ 	
-														BEGIN(INITIAL);
-														strcat(chaine, "\"");
-														yytext = chaine;
-													  	return(TOK_STRING);
-													}
+#line 45 "flex/compilateur.l"
+{
+	BEGIN(INITIAL);
+	strcat(chaine, "\"");
+	yytext = chaine;
+	//ENVOYER LA CHAINE FINAL VERS LE PARSER
+	return(TOK_STRING);
+}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 49 "flex/compilateur.l"
-{ 
-														strcat(chaine, yytext);
-													}
+#line 53 "flex/compilateur.l"
+{
+	strcat(chaine, yytext);
+}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 53 "flex/compilateur.l"
-{ BEGIN(DECL_ALGO); return(TOK_ALGO); }
+#line 57 "flex/compilateur.l"
+{
+	BEGIN(DECL_ALGO);
+	return(TOK_ALGO);
+}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 54 "flex/compilateur.l"
-{  }
+#line 62 "flex/compilateur.l"
+{
+
+}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 55 "flex/compilateur.l"
-{ return(TOK_ALGO_NAME); }
+#line 66 "flex/compilateur.l"
+{
+	return(TOK_ALGO_NAME);
+}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 56 "flex/compilateur.l"
-{ BEGIN(INITIAL); }
+#line 70 "flex/compilateur.l"
+{
+	BEGIN(INITIAL);
+}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 58 "flex/compilateur.l"
-{ BEGIN(DEF_ROLE); return(TOK_ROLE); }
+#line 74 "flex/compilateur.l"
+{
+	BEGIN(DEF_ROLE);
+	return(TOK_ROLE);
+}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 59 "flex/compilateur.l"
-{ return(TOK_COMMA); }
+#line 79 "flex/compilateur.l"
+{
+	return(TOK_COMMA);
+}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 60 "flex/compilateur.l"
-{ return(TOK_ROLE_DESC); }
+#line 83 "flex/compilateur.l"
+{
+	return(TOK_ROLE_DESC);
+}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 61 "flex/compilateur.l"
-{ BEGIN(INITIAL); }
+#line 87 "flex/compilateur.l"
+{
+	BEGIN(INITIAL);
+}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 63 "flex/compilateur.l"
-{ return(TOK_OP); }
+#line 91 "flex/compilateur.l"
+{
+	return(TOK_OP);
+}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 64 "flex/compilateur.l"
-{ return(TOK_OP); }
+#line 95 "flex/compilateur.l"
+{
+	return(TOK_OP);
+}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 65 "flex/compilateur.l"
-{ BEGIN(DECLARE_ZONE); return(TOK_DECLARE); }
+#line 99 "flex/compilateur.l"
+{
+	BEGIN(DECLARE_ZONE);
+	return(TOK_DECLARE);
+}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 67 "flex/compilateur.l"
-{  BEGIN(INITIAL); return(TOK_BEGIN); }
+#line 104 "flex/compilateur.l"
+{
+	BEGIN(INITIAL);
+	return(TOK_BEGIN);
+}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 68 "flex/compilateur.l"
-{ return(TOK_COMMA); }
+#line 109 "flex/compilateur.l"
+{
+	return(TOK_COMMA);
+}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 69 "flex/compilateur.l"
-{ return(TOK_COLON); }
+#line 113 "flex/compilateur.l"
+{
+	return(TOK_COLON);
+}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 70 "flex/compilateur.l"
-{ return(TOK_TYPE); }
+#line 117 "flex/compilateur.l"
+{
+	return(TOK_TYPE);
+}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 71 "flex/compilateur.l"
-{ return(TOK_ID); }
+#line 121 "flex/compilateur.l"
+{
+	return(TOK_ID);
+}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 72 "flex/compilateur.l"
-{  }
+#line 125 "flex/compilateur.l"
+{
+
+}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 73 "flex/compilateur.l"
-{ printf("[ATTENTION] Non reconnu dans la zone de declaration : %s\n", yytext); }	/* gestion des erreurs */
+#line 129 "flex/compilateur.l"
+{ /* gestion des erreurs */
+	printf("[ATTENTION] Non reconnu dans la zone de declaration : %s\n", yytext);
+}
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 74 "flex/compilateur.l"
-{  }
+#line 133 "flex/compilateur.l"
+{
+
+}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 76 "flex/compilateur.l"
-{ return(TOK_END); }
+#line 137 "flex/compilateur.l"
+{
+	return(TOK_END);
+}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 77 "flex/compilateur.l"
-{ BEGIN(FOR_DEF); return(TOK_FOR); }
+#line 141 "flex/compilateur.l"
+{
+	BEGIN(FOR_DEF);
+	return(TOK_FOR);
+}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 78 "flex/compilateur.l"
-{ BEGIN(WHILE_DEF); return(TOK_WHILE); }
+#line 146 "flex/compilateur.l"
+{
+	BEGIN(WHILE_DEF);
+	return(TOK_WHILE); 
+}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 79 "flex/compilateur.l"
-{ return(TOK_ELSE); }
+#line 151 "flex/compilateur.l"
+{
+	return(TOK_ELSE);
+}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 80 "flex/compilateur.l"
-{ BEGIN(IF_DEF_ZONE); return(TOK_IF); }
+#line 155 "flex/compilateur.l"
+{
+	BEGIN(IF_DEF_ZONE);
+	return(TOK_IF);
+}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 81 "flex/compilateur.l"
-{ return(TOK_EIF); }
+#line 160 "flex/compilateur.l"
+{
+	return(TOK_EIF);
+}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 82 "flex/compilateur.l"
-{ return(TOK_EWHILE); }
+#line 164 "flex/compilateur.l"
+{
+	return(TOK_EWHILE);
+}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 83 "flex/compilateur.l"
+#line 168 "flex/compilateur.l"
 { return(TOK_EIF); }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 84 "flex/compilateur.l"
+#line 169 "flex/compilateur.l"
 { return(TOK_EQUAL); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 85 "flex/compilateur.l"
+#line 170 "flex/compilateur.l"
 { return(TOK_PARL); }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 86 "flex/compilateur.l"
+#line 171 "flex/compilateur.l"
 { return(TOK_COMMA); }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 87 "flex/compilateur.l"
+#line 172 "flex/compilateur.l"
 { return(TOK_PARR); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 88 "flex/compilateur.l"
+#line 173 "flex/compilateur.l"
 { return(TOK_ID); }
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 89 "flex/compilateur.l"
+#line 174 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 91 "flex/compilateur.l"
+#line 176 "flex/compilateur.l"
 { BEGIN(INITIAL); return(TOK_WHILE); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 92 "flex/compilateur.l"
+#line 177 "flex/compilateur.l"
 { return(TOK_ID); }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 93 "flex/compilateur.l"
+#line 178 "flex/compilateur.l"
 { return(TOK_INT); }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 94 "flex/compilateur.l"
+#line 179 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 95 "flex/compilateur.l"
+#line 180 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 97 "flex/compilateur.l"
+#line 182 "flex/compilateur.l"
 { return(TOK_BY_STEP); }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 98 "flex/compilateur.l"
+#line 183 "flex/compilateur.l"
 { return(TOK_FROM); }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 99 "flex/compilateur.l"
+#line 184 "flex/compilateur.l"
 { return(TOK_TO); }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 100 "flex/compilateur.l"
+#line 185 "flex/compilateur.l"
 { BEGIN(INITIAL); return(TOK_DO); }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 101 "flex/compilateur.l"
+#line 186 "flex/compilateur.l"
 { return(TOK_ID); }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 102 "flex/compilateur.l"
+#line 187 "flex/compilateur.l"
 { return(TOK_INT); }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 103 "flex/compilateur.l"
+#line 188 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 104 "flex/compilateur.l"
+#line 189 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 106 "flex/compilateur.l"
+#line 191 "flex/compilateur.l"
 { BEGIN(INITIAL); return(TOK_THEN); }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 107 "flex/compilateur.l"
+#line 192 "flex/compilateur.l"
 { return(TOK_ID); }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 108 "flex/compilateur.l"
+#line 193 "flex/compilateur.l"
 { return(TOK_INT); }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 109 "flex/compilateur.l"
+#line 194 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 110 "flex/compilateur.l"
+#line 195 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 112 "flex/compilateur.l"
+#line 197 "flex/compilateur.l"
 {  }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 113 "flex/compilateur.l"
+#line 198 "flex/compilateur.l"
 { /* printf("Non reconnu : %s\n", yytext); */ }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1229,15 +1290,15 @@ case YY_STATE_EOF(PROGRAM_ZONE):
 case YY_STATE_EOF(FOR_DEF):
 case YY_STATE_EOF(WHILE_DEF):
 case YY_STATE_EOF(IF_DEF_ZONE):
-#line 114 "flex/compilateur.l"
+#line 199 "flex/compilateur.l"
 { yyterminate(); }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 116 "flex/compilateur.l"
+#line 201 "flex/compilateur.l"
 ECHO;
 	YY_BREAK
-#line 1240 "./src/compilateur.c"
+#line 1301 "./src/compilateur.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2240,7 +2301,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 116 "flex/compilateur.l"
+#line 201 "flex/compilateur.l"
 
 
 int main() {

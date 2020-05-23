@@ -18,7 +18,6 @@ int current_indent=0;
 %x DECL_ALGO
 %x DEF_ROLE
 %x DECLARE_ZONE
-%x PROGRAM_ZONE
 %x FOR_DEF
 %x WHILE_DEF
 %x IF_DEF_ZONE
@@ -36,82 +35,249 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	/* printf("commentaire ignorée : %s\n", yytext); */
 }
 
-<INITIAL>"\"" 										{ /* concatené les éléments */
-														BEGIN(STRING);
-														memset(chaine, 0, strlen(chaine));
-														strcat(chaine, "\""); }
-<STRING>"\""            							{ 	
-														BEGIN(INITIAL);
-														strcat(chaine, "\"");
-														yytext = chaine;
-													  	return(TOK_STRING);
-													}
-<STRING>.											{ 
-														strcat(chaine, yytext);
-													}
+<INITIAL>"\"" { /* concatené les éléments */
+	BEGIN(STRING);
+	memset(chaine, 0, strlen(chaine));
+	strcat(chaine, "\"");
+}
 
-"Algorithme"										{ BEGIN(DECL_ALGO); return(TOK_ALGO); }
-<DECL_ALGO>(" "|"\t")								{  }
-<DECL_ALGO>.*										{ return(TOK_ALGO_NAME); }
-<DECL_ALGO>\n										{ BEGIN(INITIAL); }
+<STRING>"\"" {
+	BEGIN(INITIAL);
+	strcat(chaine, "\"");
+	yytext = chaine;
+	//ENVOYER LA CHAINE FINAL VERS LE PARSER
+	return(TOK_STRING);
+}
 
-"Role"												{ BEGIN(DEF_ROLE); return(TOK_ROLE); }
-<DEF_ROLE>":"										{ return(TOK_COMMA); }
-<DEF_ROLE>.*										{ return(TOK_ROLE_DESC); }
-<DEF_ROLE>\n										{ BEGIN(INITIAL); }
+<STRING>.	{
+	strcat(chaine, yytext);
+}
 
-<WHILE_DEF,FOR_DEF,IF_DEF_ZONE>{operateur_booleen}	{ return(TOK_OP); }
-{operateur_arithmetique}							{ return(TOK_OP); }
-"Declaration"										{ BEGIN(DECLARE_ZONE); return(TOK_DECLARE); }
+<INITIAL>"Algorithme" {
+	BEGIN(DECL_ALGO);
+	return(TOK_ALGO);
+}
 
-<DECLARE_ZONE>"Debut"								{  BEGIN(INITIAL); return(TOK_BEGIN); }
-<DECLARE_ZONE>":"									{ return(TOK_COMMA); }
-<DECLARE_ZONE>","									{ return(TOK_COLON); }
-<DECLARE_ZONE>{type}								{ return(TOK_TYPE); }
-<DECLARE_ZONE>{identifiant}							{ return(TOK_ID); }
-<DECLARE_ZONE>(" "|"\t")							{  }
-<DECLARE_ZONE>.										{ printf("[ATTENTION] Non reconnu dans la zone de declaration : %s\n", yytext); }	/* gestion des erreurs */
-<DECLARE_ZONE>\n									{  }
+<DECL_ALGO>(" "|"\t")	{
 
-"Fin"												{ return(TOK_END); }
-"pour"												{ BEGIN(FOR_DEF); return(TOK_FOR); }
-"tant"[ ]*"que"										{ BEGIN(WHILE_DEF); return(TOK_WHILE); }
-"sinon"												{ return(TOK_ELSE); }
-"si"												{ BEGIN(IF_DEF_ZONE); return(TOK_IF); }
-"fpour"												{ return(TOK_EIF); }
-"ftant"												{ return(TOK_EWHILE); }
-"fsi"												{ return(TOK_EIF); }
-"="													{ return(TOK_EQUAL); }
-"("													{ return(TOK_PARL); }
-","													{ return(TOK_COMMA); }
-")"													{ return(TOK_PARR); }
-{identifiant}										{ return(TOK_ID); }
-\n				{  }
+}
 
-<WHILE_DEF>"faire"									{ BEGIN(INITIAL); return(TOK_WHILE); }
-<WHILE_DEF>{identifiant}							{ return(TOK_ID); }
-<WHILE_DEF>{nombre}									{ return(TOK_INT); }
-<WHILE_DEF>[ ]										{  }
-<WHILE_DEF>\n										{  }
+<DECL_ALGO>.*	{
+	return(TOK_ALGO_NAME);
+}
 
-<FOR_DEF>"par"[ ]*"pas"[ ]*"de"						{ return(TOK_BY_STEP); }
-<FOR_DEF>"de"										{ return(TOK_FROM); }
-<FOR_DEF>"a"										{ return(TOK_TO); }
-<FOR_DEF>"faire"									{ BEGIN(INITIAL); return(TOK_DO); }
-<FOR_DEF>{identifiant}								{ return(TOK_ID); }
-<FOR_DEF>{nombre}									{ return(TOK_INT); }
-<FOR_DEF>[ ]										{  }
-<FOR_DEF>\n											{  }
+<DECL_ALGO>\n	{
+	BEGIN(INITIAL);
+}
 
-<IF_DEF_ZONE>"alors"								{ BEGIN(INITIAL); return(TOK_THEN); }
-<IF_DEF_ZONE>{identifiant}							{ return(TOK_ID); }
-<IF_DEF_ZONE>{nombre}								{ return(TOK_INT); }
-<IF_DEF_ZONE>[ ]									{  }
-<IF_DEF_ZONE>\n										{  }
+<INITIAL>"Role"	{
+	BEGIN(DEF_ROLE);
+	return(TOK_ROLE);
+}
 
-" "|"\t"											{  }
-.													{ /* printf("Non reconnu : %s\n", yytext); */ }
-<<EOF>>												{ yyterminate(); }
+<DEF_ROLE>":"	{
+	return(TOK_COMMA);
+}
+
+<DEF_ROLE>.*	{
+	return(TOK_ROLE_DESC);
+}
+
+<DEF_ROLE>\n	{
+	BEGIN(INITIAL);
+}
+
+<WHILE_DEF,FOR_DEF,IF_DEF_ZONE>{operateur_booleen}	{
+	return(TOK_OP);
+}
+
+<INITIAL>{operateur_arithmetique}	{
+	return(TOK_OP);
+}
+
+<INITIAL>"Declaration"	{
+	BEGIN(DECLARE_ZONE);
+	return(TOK_DECLARE);
+}
+
+<DECLARE_ZONE>"Debut"	{
+	BEGIN(INITIAL);
+	return(TOK_BEGIN);
+}
+
+<DECLARE_ZONE>":"	{
+	return(TOK_COMMA);
+}
+
+<DECLARE_ZONE>","	{
+	return(TOK_COLON);
+}
+
+<DECLARE_ZONE>{type}	{
+	return(TOK_TYPE);
+}
+
+<DECLARE_ZONE>{identifiant}	{
+	return(TOK_ID);
+}
+
+<DECLARE_ZONE>(" "|"\t") {
+
+}
+
+<DECLARE_ZONE>.	{ /* gestion des erreurs */
+	printf("[ATTENTION] Non reconnu dans la zone de declaration : %s\n", yytext);
+}
+
+<DECLARE_ZONE>\n {
+
+}
+
+<INITIAL>"Fin" {
+	return(TOK_END);
+}
+
+<INITIAL>"pour" {
+	BEGIN(FOR_DEF);
+	return(TOK_FOR);
+}
+
+<INITIAL>"tant"[ ]*"que"	{
+	BEGIN(WHILE_DEF);
+	return(TOK_WHILE); 
+}
+
+<INITIAL>"sinon" {
+	return(TOK_ELSE);
+}
+
+<INITIAL>"si" {
+	BEGIN(IF_DEF_ZONE);
+	return(TOK_IF);
+}
+
+<INITIAL>"fpour" {
+	return(TOK_EIF);
+}
+
+<INITIAL>"ftant"	{
+	return(TOK_EWHILE);
+}
+
+<INITIAL>"fsi"	{
+	return(TOK_EIF);
+}
+
+<INITIAL>"="	{
+	return(TOK_EQUAL);
+}
+
+<INITIAL>"(" {
+	return(TOK_PARL);
+}
+
+<INITIAL>"," {
+	return(TOK_COMMA);
+}
+
+<INITIAL>")" {
+	return(TOK_PARR);
+}
+
+<INITIAL>{identifiant} {
+	return(TOK_ID);
+}
+
+<INITIAL>\n {
+
+}
+
+<WHILE_DEF>"faire" {
+	BEGIN(INITIAL);
+	return(TOK_WHILE);
+}
+
+<WHILE_DEF>{identifiant} {
+	return(TOK_ID);
+}
+
+<WHILE_DEF>{nombre}	{
+	return(TOK_INT);
+}
+
+<WHILE_DEF>[ ] {
+
+}
+
+<WHILE_DEF>\n {
+
+}
+
+<FOR_DEF>"par"[ ]*"pas"[ ]*"de" {
+	return(TOK_BY_STEP);
+}
+
+<FOR_DEF>"de" {
+	return(TOK_FROM);
+}
+
+<FOR_DEF>"a" {
+	return(TOK_TO);
+}
+
+<FOR_DEF>"faire" {
+	BEGIN(INITIAL);
+	return(TOK_DO);
+}
+
+<FOR_DEF>{identifiant} {
+	return(TOK_ID);
+}
+
+<FOR_DEF>{nombre} {
+	return(TOK_INT);
+}
+
+<FOR_DEF>[ ] {
+
+}
+
+<FOR_DEF>\n {
+
+}
+
+<IF_DEF_ZONE>"alors" {
+	BEGIN(INITIAL);
+	return(TOK_THEN);
+}
+
+<IF_DEF_ZONE>{identifiant} {
+	return(TOK_ID);
+}
+
+<IF_DEF_ZONE>{nombre} {
+	return(TOK_INT);
+}
+
+<IF_DEF_ZONE>[ ] {
+
+}
+
+<IF_DEF_ZONE>\n {
+
+}
+
+<INITIAL>" "|"\t" {
+
+}
+
+<INITIAL>. {
+	/* printf("Non reconnu : %s\n", yytext); */
+}
+
+<INITIAL><<EOF>>	{
+	yyterminate();
+}
 
 %%
 
