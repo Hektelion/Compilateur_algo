@@ -120,7 +120,7 @@ declaration_variable: TOK_ID TOK_COMMA TOK_TYPE { printf("\tDeclaration variable
 debut: TOK_BEGIN { printf("Debut : OK\n"); }
      ;
 
-fin: TOK_END 	{ printf("Fin : OK\n"); }
+fin: TOK_END { printf("Fin : OK\n"); }
    ;
 
 programme: bloc_instruction {  }
