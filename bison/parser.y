@@ -118,11 +118,9 @@ declaration_variable: TOK_ID TOK_COMMA TOK_TYPE { printf("\tDeclaration variable
                     ;
 
 debut: TOK_BEGIN { printf("Debut : OK\n"); }
-     | %empty	 {  }
      ;
 
 fin: TOK_END 	{ printf("Fin : OK\n"); }
-   | %empty		{  }
    ;
 
 programme: bloc_instruction {  }
@@ -160,7 +158,8 @@ structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF { 
 						| TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF { printf("\tStructure conditionnelle si sinon : OK\n"); }
 						;
 
-structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR { printf("\titérateur %s : OK\n", $2); printf("\tStructure itérative pour : OK\n");  }
+structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR { printf("\tStructure itérative pour itérateur %s : OK\n", $2); }
+				   | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR { printf("\tStructure itérative pour avec pas itérateur %s : OK\n", $2); }
 				   | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE { printf("\tStructure itérative tant que : OK\n"); }
 				   ;
 

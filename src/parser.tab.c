@@ -489,16 +489,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   60
+#define YYLAST   66
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  36
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  17
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  40
+#define YYNRULES  39
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  73
+#define YYNSTATES  78
 
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   290
@@ -550,10 +550,9 @@ static const yytype_int8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    96,    96,    99,   100,   101,   104,   105,   106,   107,
-     108,   111,   112,   113,   116,   117,   120,   121,   124,   125,
-     128,   129,   132,   133,   134,   135,   138,   139,   142,   143,
-     144,   147,   148,   151,   152,   155,   156,   159,   160,   163,
-     164
+     108,   111,   112,   113,   116,   117,   120,   123,   126,   127,
+     130,   131,   132,   133,   136,   137,   140,   141,   142,   145,
+     146,   149,   150,   153,   154,   157,   158,   161,   162,   163
 };
 #endif
 
@@ -602,14 +601,14 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       8,    17,    32,    30,   -43,   -43,    -3,    31,   -43,    33,
-      31,    -4,   -43,     2,   -43,    -5,   -43,    -6,     2,    35,
-     -16,     5,   -16,   -13,    34,   -43,    -6,    -6,    -6,   -43,
-     -43,   -43,   -16,   -43,    28,    14,    36,    27,   -16,    -1,
-     -43,   -43,   -43,   -43,   -43,    16,    -6,   -16,   -10,    -6,
-     -43,   -43,   -43,    18,    15,   -43,    -2,   -43,    37,    29,
-     -43,    -1,    -6,   -43,   -10,   -43,   -43,    39,    38,   -43,
-      -6,    40,   -43
+       8,    17,    27,    30,   -43,   -43,    -3,    25,   -43,    35,
+      25,    -4,   -43,     7,   -43,     5,   -43,    -6,     7,    33,
+     -16,     9,   -16,   -13,    37,   -43,    -6,    -6,    -6,   -43,
+     -43,   -43,   -16,   -43,    34,    22,    36,    32,   -16,    -1,
+     -43,   -43,   -43,   -43,   -43,    18,    -6,   -16,   -10,    -6,
+     -43,   -43,   -43,    23,    20,   -43,    -2,   -43,    38,    39,
+     -43,    -1,    -6,   -43,   -10,   -43,   -43,    42,    21,   -43,
+     -10,    -6,    40,    43,    -6,   -43,    44,   -43
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -618,20 +617,20 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        5,     4,     0,    10,     3,     1,     9,    13,     8,     7,
-      13,    17,     6,    11,    16,     0,    12,    21,     0,     0,
-       0,     0,     0,     0,    19,    20,    25,    25,    25,    15,
-      14,    36,     0,    35,     0,    28,     0,     0,     0,     0,
-      18,     2,    22,    23,    24,     0,    25,     0,     0,    25,
-      27,    33,    34,     0,    32,    30,     0,    29,     0,     0,
-      26,     0,    25,    37,     0,    40,    31,     0,     0,    38,
-      25,     0,    39
+      13,     0,     6,    11,    16,     0,    12,    19,     0,     0,
+       0,     0,     0,     0,     0,    18,    23,    23,    23,    15,
+      14,    34,     0,    33,     0,    26,     0,     0,     0,     0,
+      17,     2,    20,    21,    22,     0,    23,     0,     0,    23,
+      25,    31,    32,     0,    30,    28,     0,    27,     0,     0,
+      24,     0,    23,    35,     0,    39,    29,     0,     0,    36,
+       0,    23,     0,     0,    23,    37,     0,    38
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -43,   -43,   -43,   -43,    45,    41,   -43,   -43,   -43,   -26,
-     -43,   -14,   -11,   -43,   -42,   -43,   -43
+     -43,   -43,   -43,   -43,    47,    48,   -43,   -43,   -43,   -26,
+     -43,   -14,     1,   -43,   -42,   -43,   -43
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -648,22 +647,22 @@ static const yytype_int8 yytable[] =
 {
       42,    43,    44,     8,    14,    20,    58,    31,    37,    21,
       62,     1,    63,    31,    32,    22,    38,    39,    45,    33,
-      56,     4,    68,    59,    50,    33,    51,    18,    19,    23,
-       9,    15,     5,    57,    52,     6,    67,    15,    10,    12,
-      36,    46,    47,    40,    71,    30,    49,    55,    61,    60,
-      66,    65,    48,    69,    64,    13,     0,    70,     0,    29,
-      72
+      56,     4,    68,    59,    50,    33,    51,     5,    72,    23,
+       9,    15,    10,    57,    52,     6,    67,    18,    19,    70,
+      71,    12,    15,    30,    36,    73,    40,    46,    76,    55,
+      47,    49,    48,    61,    60,    64,    69,    13,     0,    74,
+       0,    65,    66,    75,    77,     0,    29
 };
 
 static const yytype_int8 yycheck[] =
 {
       26,    27,    28,     6,     8,    11,    48,    23,    22,    15,
       12,     3,    14,    23,    30,    21,    29,    30,    32,    35,
-      46,     4,    64,    49,    38,    35,    27,    32,    33,    35,
-      33,    35,     0,    47,    35,     5,    62,    35,     7,     6,
-      35,    13,    28,     9,    70,    10,    19,    31,    33,    31,
-      61,    22,    16,    14,    17,    10,    -1,    19,    -1,    18,
-      20
+      46,     4,    64,    49,    38,    35,    27,     0,    70,    35,
+      33,    35,     7,    47,    35,     5,    62,    32,    33,    18,
+      19,     6,    35,    10,    35,    71,     9,    13,    74,    31,
+      28,    19,    16,    33,    31,    17,    14,    10,    -1,    19,
+      -1,    22,    61,    20,    20,    -1,    18
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -677,27 +676,25 @@ static const yytype_int8 yystos[] =
        9,    43,    45,    45,    45,    47,    13,    28,    16,    19,
       47,    27,    35,    48,    49,    31,    45,    47,    50,    45,
       31,    33,    12,    14,    17,    22,    48,    45,    50,    14,
-      19,    45,    20
+      18,    19,    50,    45,    19,    20,    45,    20
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
        0,    36,    37,    38,    38,    38,    39,    39,    39,    39,
-      39,    40,    40,    40,    41,    41,    42,    42,    43,    43,
-      44,    44,    45,    45,    45,    45,    46,    46,    47,    47,
-      47,    48,    48,    49,    49,    50,    50,    51,    51,    52,
-      52
+      39,    40,    40,    40,    41,    41,    42,    43,    44,    44,
+      45,    45,    45,    45,    46,    46,    47,    47,    47,    48,
+      48,    49,    49,    50,    50,    51,    51,    52,    52,    52
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     6,     2,     1,     0,     3,     2,     2,     1,
-       0,     2,     2,     0,     3,     3,     1,     0,     1,     0,
-       1,     0,     2,     2,     2,     0,     4,     3,     1,     3,
-       3,     3,     1,     1,     1,     1,     1,     5,     7,     9,
-       5
+       0,     2,     2,     0,     3,     3,     1,     1,     1,     0,
+       2,     2,     2,     0,     4,     3,     1,     3,     3,     3,
+       1,     1,     1,     1,     1,     5,     7,     9,    11,     5
 };
 
 
@@ -1395,239 +1392,233 @@ yyreduce:
   case 2:
 #line 96 "./bison/parser.y"
                                                                       { printf("Algorithme : OK\n"); }
-#line 1399 "parser.tab.c"
+#line 1396 "parser.tab.c"
     break;
 
   case 3:
 #line 99 "./bison/parser.y"
                                         { printf("Algorithme definition avec nom : OK\n"); }
-#line 1405 "parser.tab.c"
+#line 1402 "parser.tab.c"
     break;
 
   case 4:
 #line 100 "./bison/parser.y"
                                         { printf("Algorithme definition sans nom : OK\n"); }
-#line 1411 "parser.tab.c"
+#line 1408 "parser.tab.c"
     break;
 
   case 5:
 #line 101 "./bison/parser.y"
                                         {  }
-#line 1417 "parser.tab.c"
+#line 1414 "parser.tab.c"
     break;
 
   case 6:
 #line 104 "./bison/parser.y"
                                             { printf("Role avec description : OK\n"); }
-#line 1423 "parser.tab.c"
+#line 1420 "parser.tab.c"
     break;
 
   case 7:
 #line 105 "./bison/parser.y"
                                             { printf("\tRole sans description avec comma : OK\n"); }
-#line 1429 "parser.tab.c"
+#line 1426 "parser.tab.c"
     break;
 
   case 8:
 #line 106 "./bison/parser.y"
                                                     { printf("\tRole avec description sans comma : OK\n"); }
-#line 1435 "parser.tab.c"
+#line 1432 "parser.tab.c"
     break;
 
   case 9:
 #line 107 "./bison/parser.y"
                                             { printf("\tRole sans description : OK\n"); }
-#line 1441 "parser.tab.c"
+#line 1438 "parser.tab.c"
     break;
 
   case 10:
 #line 108 "./bison/parser.y"
                                             {  }
-#line 1447 "parser.tab.c"
+#line 1444 "parser.tab.c"
     break;
 
   case 11:
 #line 111 "./bison/parser.y"
                                                 { printf("\tDeclaration : OK\n"); }
-#line 1453 "parser.tab.c"
+#line 1450 "parser.tab.c"
     break;
 
   case 12:
 #line 112 "./bison/parser.y"
                                                 { printf("\tDeclaration variable : OK\n"); }
-#line 1459 "parser.tab.c"
+#line 1456 "parser.tab.c"
     break;
 
   case 13:
 #line 113 "./bison/parser.y"
                                                 {  }
-#line 1465 "parser.tab.c"
+#line 1462 "parser.tab.c"
     break;
 
   case 14:
 #line 116 "./bison/parser.y"
                                                 { printf("\tDeclaration variable : OK\n"); }
-#line 1471 "parser.tab.c"
+#line 1468 "parser.tab.c"
     break;
 
   case 15:
 #line 117 "./bison/parser.y"
                                                                                 { printf("\tDeclaration multiple de variables : OK\n"); }
-#line 1477 "parser.tab.c"
+#line 1474 "parser.tab.c"
     break;
 
   case 16:
 #line 120 "./bison/parser.y"
                  { printf("Debut : OK\n"); }
-#line 1483 "parser.tab.c"
+#line 1480 "parser.tab.c"
     break;
 
   case 17:
-#line 121 "./bison/parser.y"
-                 {  }
-#line 1489 "parser.tab.c"
+#line 123 "./bison/parser.y"
+                { printf("Fin : OK\n"); }
+#line 1486 "parser.tab.c"
     break;
 
   case 18:
-#line 124 "./bison/parser.y"
-                { printf("Fin : OK\n"); }
-#line 1495 "parser.tab.c"
+#line 126 "./bison/parser.y"
+                            {  }
+#line 1492 "parser.tab.c"
     break;
 
   case 19:
-#line 125 "./bison/parser.y"
-                        {  }
-#line 1501 "parser.tab.c"
+#line 127 "./bison/parser.y"
+                          {  }
+#line 1498 "parser.tab.c"
     break;
 
   case 20:
-#line 128 "./bison/parser.y"
-                            {  }
-#line 1507 "parser.tab.c"
+#line 130 "./bison/parser.y"
+                                               {  }
+#line 1504 "parser.tab.c"
     break;
 
   case 21:
-#line 129 "./bison/parser.y"
-                          {  }
-#line 1513 "parser.tab.c"
+#line 131 "./bison/parser.y"
+                                                                            {  }
+#line 1510 "parser.tab.c"
     break;
 
   case 22:
 #line 132 "./bison/parser.y"
-                                               {  }
-#line 1519 "parser.tab.c"
+                                                                       {  }
+#line 1516 "parser.tab.c"
     break;
 
   case 23:
 #line 133 "./bison/parser.y"
-                                                                            {  }
-#line 1525 "parser.tab.c"
+                                         { printf("\tbloc d'instruction : OK\n"); }
+#line 1522 "parser.tab.c"
     break;
 
   case 24:
-#line 134 "./bison/parser.y"
-                                                                       {  }
-#line 1531 "parser.tab.c"
+#line 136 "./bison/parser.y"
+                                                { printf("\tInstruction : OK\n"); }
+#line 1528 "parser.tab.c"
     break;
 
   case 25:
-#line 135 "./bison/parser.y"
-                                         { printf("\tbloc d'instruction : OK\n"); }
-#line 1537 "parser.tab.c"
+#line 137 "./bison/parser.y"
+                                                 { printf("\tAffectation : OK\n"); }
+#line 1534 "parser.tab.c"
     break;
 
   case 26:
-#line 138 "./bison/parser.y"
-                                                { printf("\tInstruction : OK\n"); }
-#line 1543 "parser.tab.c"
+#line 140 "./bison/parser.y"
+                     {  }
+#line 1540 "parser.tab.c"
     break;
 
   case 27:
-#line 139 "./bison/parser.y"
-                                                 { printf("\tAffectation : OK\n"); }
-#line 1549 "parser.tab.c"
+#line 141 "./bison/parser.y"
+                                               { printf("\t\topérateur %s : OK\n", (yyvsp[-1].chaine)); }
+#line 1546 "parser.tab.c"
     break;
 
   case 28:
 #line 142 "./bison/parser.y"
-                     {  }
-#line 1555 "parser.tab.c"
+                                                 {  }
+#line 1552 "parser.tab.c"
     break;
 
   case 29:
-#line 143 "./bison/parser.y"
-                                               { printf("\t\topérateur %s : OK\n", (yyvsp[-1].chaine)); }
-#line 1561 "parser.tab.c"
+#line 145 "./bison/parser.y"
+                                        {  }
+#line 1558 "parser.tab.c"
     break;
 
   case 30:
-#line 144 "./bison/parser.y"
-                                                 {  }
-#line 1567 "parser.tab.c"
+#line 146 "./bison/parser.y"
+                            {  }
+#line 1564 "parser.tab.c"
     break;
 
   case 31:
-#line 147 "./bison/parser.y"
-                                        {  }
-#line 1573 "parser.tab.c"
+#line 149 "./bison/parser.y"
+                     {  }
+#line 1570 "parser.tab.c"
     break;
 
   case 32:
-#line 148 "./bison/parser.y"
-                            {  }
-#line 1579 "parser.tab.c"
+#line 150 "./bison/parser.y"
+                         {  }
+#line 1576 "parser.tab.c"
     break;
 
   case 33:
-#line 151 "./bison/parser.y"
-                     {  }
-#line 1585 "parser.tab.c"
+#line 153 "./bison/parser.y"
+                 { printf("\t\topérande variable %s : OK\n", (yyvsp[0].chaine)); }
+#line 1582 "parser.tab.c"
     break;
 
   case 34:
-#line 152 "./bison/parser.y"
-                         {  }
-#line 1591 "parser.tab.c"
+#line 154 "./bison/parser.y"
+                          { printf("\t\topérande nombre %d : OK\n", (yyvsp[0].nombre)); }
+#line 1588 "parser.tab.c"
     break;
 
   case 35:
-#line 155 "./bison/parser.y"
-                 { printf("\t\topérande variable %s : OK\n", (yyvsp[0].chaine)); }
-#line 1597 "parser.tab.c"
+#line 157 "./bison/parser.y"
+                                                                              { printf("\tStructure conditionnelle si : OK\n"); }
+#line 1594 "parser.tab.c"
     break;
 
   case 36:
-#line 156 "./bison/parser.y"
-                          { printf("\t\topérande nombre %d : OK\n", (yyvsp[0].nombre)); }
-#line 1603 "parser.tab.c"
+#line 158 "./bison/parser.y"
+                                                                                                                                { printf("\tStructure conditionnelle si sinon : OK\n"); }
+#line 1600 "parser.tab.c"
     break;
 
   case 37:
-#line 159 "./bison/parser.y"
-                                                                              { printf("\tStructure conditionnelle si : OK\n"); }
-#line 1609 "parser.tab.c"
+#line 161 "./bison/parser.y"
+                                                                                                       { printf("\tStructure itérative pour itérateur %s : OK\n", (yyvsp[-7].chaine)); }
+#line 1606 "parser.tab.c"
     break;
 
   case 38:
-#line 160 "./bison/parser.y"
-                                                                                                                                { printf("\tStructure conditionnelle si sinon : OK\n"); }
-#line 1615 "parser.tab.c"
+#line 162 "./bison/parser.y"
+                                                                                                                                            { printf("\tStructure itérative pour avec pas itérateur %s : OK\n", (yyvsp[-9].chaine)); }
+#line 1612 "parser.tab.c"
     break;
 
   case 39:
 #line 163 "./bison/parser.y"
-                                                                                                       { printf("\titérateur %s : OK\n", (yyvsp[-7].chaine)); printf("\tStructure itérative pour : OK\n");  }
-#line 1621 "parser.tab.c"
-    break;
-
-  case 40:
-#line 164 "./bison/parser.y"
                                                                                              { printf("\tStructure itérative tant que : OK\n"); }
-#line 1627 "parser.tab.c"
+#line 1618 "parser.tab.c"
     break;
 
 
-#line 1631 "parser.tab.c"
+#line 1622 "parser.tab.c"
 
       default: break;
     }
@@ -1859,7 +1850,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 167 "./bison/parser.y"
+#line 166 "./bison/parser.y"
 
 
 int yyerror (const char *msg) {

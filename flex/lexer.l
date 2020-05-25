@@ -88,11 +88,6 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	BEGIN(INITIAL);
 }
 
-<WHILE_DEF,FOR_DEF,IF_DEF_ZONE>{operateur_booleen}	{
-	yylval.chaine = strdup(yytext);
-	return(TOK_OP);
-}
-
 <INITIAL>"Declaration"	{
 	BEGIN(DECLARE_ZONE);
 	return(TOK_DECLARE);
@@ -166,13 +161,9 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_PARR);
 }
 
-<FOR_DEF>"par"[ ]*"pas"[ ]*"de" {
-	return(TOK_BY_STEP);
-}
+<FOR_DEF>"par"[ ]*"pas"[ ]*"de" { return(TOK_BY_STEP); }
 
-<FOR_DEF>"de" {
-	return(TOK_FROM);
-}
+<FOR_DEF>"de" { return(TOK_FROM); }
 
 <FOR_DEF>"a" {
 	return(TOK_TO);
@@ -186,6 +177,11 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 <FOR_DEF,WHILE_DEF>"faire" {
 	BEGIN(INITIAL);
 	return(TOK_DO);
+}
+
+<INITIAL,WHILE_DEF,FOR_DEF,IF_DEF_ZONE>{operateur_booleen}	{
+	yylval.chaine = strdup(yytext);
+	return(TOK_OP);
 }
 
 <INITIAL,IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{operateur_arithmetique}	{
