@@ -23,7 +23,7 @@ int current_indent=0;
 %x IF_DEF_ZONE
 
 commentaire         	((\/\/|#).*)
-identifiant				[a-z|A-Z][a-z|A-Z|_]*
+identifiant				-[a-z|A-Z][a-z|A-Z|_]*|[a-z|A-Z][a-z|A-Z|_]*
 nombre					-[0-9]+|[0-9]+
 type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 operateur_booleen		("=="|"!="|">"|"<"|">="|"<=")
@@ -58,16 +58,8 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_ALGO);
 }
 
-<DECL_ALGO>(" "|"\t")	{
-
-}
-
 <DECL_ALGO>.*	{
 	return(TOK_ALGO_NAME);
-}
-
-<DECL_ALGO>\n	{
-	BEGIN(INITIAL);
 }
 
 <INITIAL>"Role"	{
@@ -83,7 +75,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_ROLE_DESC);
 }
 
-<DEF_ROLE>\n	{
+<DECL_ALGO,DEF_ROLE>\n	{
 	BEGIN(INITIAL);
 }
 
@@ -115,22 +107,6 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 
 <DECLARE_ZONE>{type}	{
 	return(TOK_TYPE);
-}
-
-<DECLARE_ZONE>{identifiant}	{
-	return(TOK_ID);
-}
-
-<DECLARE_ZONE>(" "|"\t") {
-
-}
-
-<DECLARE_ZONE>.	{ /* gestion des erreurs */
-	printf("[ATTENTION] Non reconnu dans la zone de declaration : %s\n", yytext);
-}
-
-<DECLARE_ZONE>\n {
-
 }
 
 <INITIAL>"Fin" {
@@ -184,35 +160,6 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_PARR);
 }
 
-<INITIAL>{identifiant} {
-	return(TOK_ID);
-}
-
-<INITIAL>\n {
-
-}
-
-<WHILE_DEF>"faire" {
-	BEGIN(INITIAL);
-	return(TOK_WHILE);
-}
-
-<WHILE_DEF>{identifiant} {
-	return(TOK_ID);
-}
-
-<WHILE_DEF>{nombre}	{
-	return(TOK_INT);
-}
-
-<WHILE_DEF>[ ] {
-
-}
-
-<WHILE_DEF>\n {
-
-}
-
 <FOR_DEF>"par"[ ]*"pas"[ ]*"de" {
 	return(TOK_BY_STEP);
 }
@@ -225,54 +172,34 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_TO);
 }
 
-<FOR_DEF>"faire" {
-	BEGIN(INITIAL);
-	return(TOK_DO);
-}
-
-<FOR_DEF>{identifiant} {
-	return(TOK_ID);
-}
-
-<FOR_DEF>{nombre} {
-	return(TOK_INT);
-}
-
-<FOR_DEF>[ ] {
-
-}
-
-<FOR_DEF>\n {
-
-}
-
 <IF_DEF_ZONE>"alors" {
 	BEGIN(INITIAL);
 	return(TOK_THEN);
 }
 
-<IF_DEF_ZONE>{identifiant} {
+<FOR_DEF,WHILE_DEF>"faire" {
+	BEGIN(INITIAL);
+	return(TOK_DO);
+}
+
+<INITIAL,DECLARE_ZONE,IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{identifiant} {
 	return(TOK_ID);
 }
 
-<IF_DEF_ZONE>{nombre} {
+<IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{nombre} {
 	return(TOK_INT);
 }
 
-<IF_DEF_ZONE>[ ] {
+<INITIAL,DECL_ALGO,DECLARE_ZONE,IF_DEF_ZONE,FOR_DEF,WHILE_DEF>(" "|"\t") {
 
 }
 
-<IF_DEF_ZONE>\n {
+<INITIAL,DECLARE_ZONE,WHILE_DEF,FOR_DEF,IF_DEF_ZONE>\n {
 
 }
 
-<INITIAL>" "|"\t" {
-
-}
-
-<INITIAL>. {
-	/* printf("Non reconnu : %s\n", yytext); */
+<INITIAL,DECLARE_ZONE>. {
+	printf("Non reconnu : %s\n", yytext);
 }
 
 <INITIAL><<EOF>>	{
@@ -360,6 +287,8 @@ void debug_token(int v_token) {
 		case TOK_QUOTE: printf("TOK_QUOTE");  break;
 
 		case TOK_ID: printf("TOK_ID");  break;
+
+		default: printf("ERREUR <-----------------\n"); break;
 	}
 	printf(" : %s\n", yytext);
 }
