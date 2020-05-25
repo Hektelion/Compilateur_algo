@@ -2,13 +2,17 @@
 
 #include <string.h>
 
-#include <constant.h>
+#include <include.h>
+
+//#include <constant.h>
 
 void indent(int v_token);
 void debug_token(int v_token);
 
 char chaine[1024];
 int current_indent=0;
+
+int nb_line=1;
  
 %}
 
@@ -67,6 +71,10 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_ROLE);
 }
 
+<DEF_ROLE>(" "|"\t") {
+	
+}
+
 <DEF_ROLE>":"	{
 	return(TOK_COMMA);
 }
@@ -76,6 +84,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <DECL_ALGO,DEF_ROLE>\n	{
+	nb_line++;
 	BEGIN(INITIAL);
 }
 
@@ -195,7 +204,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <INITIAL,DECLARE_ZONE,WHILE_DEF,FOR_DEF,IF_DEF_ZONE>\n {
-
+	nb_line++;
 }
 
 <INITIAL,DECLARE_ZONE>. {
@@ -208,6 +217,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 
 %%
 
+/*
 int main() {
     int token;
 
@@ -223,6 +233,7 @@ int main() {
 
     return 0;
 }
+*/
 
 void indent(int v_token) {
 	switch(v_token) {

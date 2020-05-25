@@ -1,0 +1,864 @@
+Terminaux inutilisés dans la grammaire
+
+    TOK_BY_STEP
+    TOK_FLOAT
+    TOK_CHAR
+    TOK_BOOL
+    TOK_QUOTE
+
+
+État 11 conflits: 1 décalage/réduction
+État 13 conflits: 1 décalage/réduction
+État 17 conflits: 2 réduction/réduction
+
+
+Grammaire
+
+    0 $accept: algorithme $end
+
+    1 algorithme: algo_definition algo_role declaration debut programme fin
+
+    2 algo_definition: TOK_ALGO TOK_ALGO_NAME
+    3                | TOK_ALGO
+    4                | %empty
+
+    5 algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC
+    6          | TOK_ROLE TOK_COMMA
+    7          | TOK_ROLE TOK_ROLE_DESC
+    8          | TOK_ROLE
+    9          | %empty
+
+   10 declaration: TOK_DECLARE declaration
+   11            | declaration declaration_variable
+   12            | %empty
+
+   13 declaration_variable: TOK_ID TOK_COMMA TOK_TYPE
+   14                     | TOK_ID TOK_COLON declaration_variable
+
+   15 debut: TOK_BEGIN
+   16      | %empty
+
+   17 fin: TOK_END
+   18    | %empty
+
+   19 programme: bloc_instruction
+   20          | %empty
+
+   21 bloc_instruction: instruction bloc_instruction
+   22                 | structure_conditionnelle bloc_instruction
+   23                 | structure_iterative bloc_instruction
+   24                 | %empty
+
+   25 instruction: TOK_ID TOK_PARL arguments TOK_PARR
+   26            | TOK_ID TOK_EQUAL expression
+
+   27 expression: operande
+   28           | operande TOK_OP expression
+   29           | TOK_PARL expression TOK_PARR
+
+   30 arguments: argument TOK_COMMA arguments
+   31          | argument
+
+   32 argument: TOK_STRING
+   33         | TOK_ID
+
+   34 operande: TOK_ID
+   35         | TOK_INT
+
+   36 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF
+   37                         | TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+   39                    | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE
+
+
+Terminaux, suivis des règles où ils apparaissent
+
+    $end (0) 0
+    error (256)
+    TOK_ALGO (258) 2 3
+    TOK_ALGO_NAME (259) 2
+    TOK_ROLE (260) 5 6 7 8
+    TOK_ROLE_DESC (261) 5 7
+    TOK_DECLARE (262) 10
+    TOK_BEGIN (263) 15
+    TOK_END (264) 17
+    TOK_TYPE (265) 13
+    TOK_IF (266) 36 37
+    TOK_ELSE (267) 37
+    TOK_THEN (268) 36 37
+    TOK_EIF (269) 36 37
+    TOK_FOR (270) 38
+    TOK_FROM (271) 38
+    TOK_TO (272) 38
+    TOK_BY_STEP (273)
+    TOK_DO (274) 38 39
+    TOK_EFOR (275) 38
+    TOK_WHILE (276) 39
+    TOK_EWHILE (277) 39
+    TOK_INT (278) 35
+    TOK_FLOAT (279)
+    TOK_CHAR (280)
+    TOK_BOOL (281)
+    TOK_STRING (282) 32
+    TOK_OP (283) 28
+    TOK_EQUAL (284) 26
+    TOK_PARL (285) 25 29
+    TOK_PARR (286) 25 29
+    TOK_COLON (287) 14
+    TOK_COMMA (288) 5 6 13 30
+    TOK_QUOTE (289)
+    TOK_ID (290) 13 14 25 26 33 34 38
+
+
+Non-terminaux, suivis des règles où ils apparaissent
+
+    $accept (36)
+        à gauche: 0
+    algorithme <chaine> (37)
+        à gauche: 1
+        à droite: 0
+    algo_definition <chaine> (38)
+        à gauche: 2 3 4
+        à droite: 1
+    algo_role <chaine> (39)
+        à gauche: 5 6 7 8 9
+        à droite: 1
+    declaration <chaine> (40)
+        à gauche: 10 11 12
+        à droite: 1 10 11
+    declaration_variable <chaine> (41)
+        à gauche: 13 14
+        à droite: 11 14
+    debut (42)
+        à gauche: 15 16
+        à droite: 1
+    fin (43)
+        à gauche: 17 18
+        à droite: 1
+    programme (44)
+        à gauche: 19 20
+        à droite: 1
+    bloc_instruction <chaine> (45)
+        à gauche: 21 22 23 24
+        à droite: 19 21 22 23 36 37 38 39
+    instruction <chaine> (46)
+        à gauche: 25 26
+        à droite: 21
+    expression <chaine> (47)
+        à gauche: 27 28 29
+        à droite: 26 28 29 36 37 39
+    arguments <chaine> (48)
+        à gauche: 30 31
+        à droite: 25 30
+    argument <chaine> (49)
+        à gauche: 32 33
+        à droite: 30 31
+    operande <chaine> (50)
+        à gauche: 34 35
+        à droite: 27 28 38
+    structure_conditionnelle <chaine> (51)
+        à gauche: 36 37
+        à droite: 22
+    structure_iterative <chaine> (52)
+        à gauche: 38 39
+        à droite: 23
+
+
+État 0
+
+    0 $accept: . algorithme $end
+
+    TOK_ALGO  décalage et aller à l'état 1
+
+    $défaut  réduction par utilisation de la règle 4 (algo_definition)
+
+    algorithme       aller à l'état 2
+    algo_definition  aller à l'état 3
+
+
+État 1
+
+    2 algo_definition: TOK_ALGO . TOK_ALGO_NAME
+    3                | TOK_ALGO .
+
+    TOK_ALGO_NAME  décalage et aller à l'état 4
+
+    $défaut  réduction par utilisation de la règle 3 (algo_definition)
+
+
+État 2
+
+    0 $accept: algorithme . $end
+
+    $end  décalage et aller à l'état 5
+
+
+État 3
+
+    1 algorithme: algo_definition . algo_role declaration debut programme fin
+
+    TOK_ROLE  décalage et aller à l'état 6
+
+    $défaut  réduction par utilisation de la règle 9 (algo_role)
+
+    algo_role  aller à l'état 7
+
+
+État 4
+
+    2 algo_definition: TOK_ALGO TOK_ALGO_NAME .
+
+    $défaut  réduction par utilisation de la règle 2 (algo_definition)
+
+
+État 5
+
+    0 $accept: algorithme $end .
+
+    $défaut  accepter
+
+
+État 6
+
+    5 algo_role: TOK_ROLE . TOK_COMMA TOK_ROLE_DESC
+    6          | TOK_ROLE . TOK_COMMA
+    7          | TOK_ROLE . TOK_ROLE_DESC
+    8          | TOK_ROLE .
+
+    TOK_ROLE_DESC  décalage et aller à l'état 8
+    TOK_COMMA      décalage et aller à l'état 9
+
+    $défaut  réduction par utilisation de la règle 8 (algo_role)
+
+
+État 7
+
+    1 algorithme: algo_definition algo_role . declaration debut programme fin
+
+    TOK_DECLARE  décalage et aller à l'état 10
+
+    $défaut  réduction par utilisation de la règle 12 (declaration)
+
+    declaration  aller à l'état 11
+
+
+État 8
+
+    7 algo_role: TOK_ROLE TOK_ROLE_DESC .
+
+    $défaut  réduction par utilisation de la règle 7 (algo_role)
+
+
+État 9
+
+    5 algo_role: TOK_ROLE TOK_COMMA . TOK_ROLE_DESC
+    6          | TOK_ROLE TOK_COMMA .
+
+    TOK_ROLE_DESC  décalage et aller à l'état 12
+
+    $défaut  réduction par utilisation de la règle 6 (algo_role)
+
+
+État 10
+
+   10 declaration: TOK_DECLARE . declaration
+
+    TOK_DECLARE  décalage et aller à l'état 10
+
+    $défaut  réduction par utilisation de la règle 12 (declaration)
+
+    declaration  aller à l'état 13
+
+
+État 11
+
+    1 algorithme: algo_definition algo_role declaration . debut programme fin
+   11 declaration: declaration . declaration_variable
+
+    TOK_BEGIN  décalage et aller à l'état 14
+    TOK_ID     décalage et aller à l'état 15
+
+    TOK_ID    [réduction par utilisation de la règle 16 (debut)]
+    $défaut  réduction par utilisation de la règle 16 (debut)
+
+    declaration_variable  aller à l'état 16
+    debut                 aller à l'état 17
+
+
+État 12
+
+    5 algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC .
+
+    $défaut  réduction par utilisation de la règle 5 (algo_role)
+
+
+État 13
+
+   10 declaration: TOK_DECLARE declaration .
+   11            | declaration . declaration_variable
+
+    TOK_ID  décalage et aller à l'état 15
+
+    TOK_ID    [réduction par utilisation de la règle 10 (declaration)]
+    $défaut  réduction par utilisation de la règle 10 (declaration)
+
+    declaration_variable  aller à l'état 16
+
+
+État 14
+
+   15 debut: TOK_BEGIN .
+
+    $défaut  réduction par utilisation de la règle 15 (debut)
+
+
+État 15
+
+   13 declaration_variable: TOK_ID . TOK_COMMA TOK_TYPE
+   14                     | TOK_ID . TOK_COLON declaration_variable
+
+    TOK_COLON  décalage et aller à l'état 18
+    TOK_COMMA  décalage et aller à l'état 19
+
+
+État 16
+
+   11 declaration: declaration declaration_variable .
+
+    $défaut  réduction par utilisation de la règle 11 (declaration)
+
+
+État 17
+
+    1 algorithme: algo_definition algo_role declaration debut . programme fin
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $end      réduction par utilisation de la règle 20 (programme)
+    $end      [réduction par utilisation de la règle 24 (bloc_instruction)]
+    TOK_END   réduction par utilisation de la règle 20 (programme)
+    TOK_END   [réduction par utilisation de la règle 24 (bloc_instruction)]
+    $défaut  réduction par utilisation de la règle 20 (programme)
+
+    programme                 aller à l'état 24
+    bloc_instruction          aller à l'état 25
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 18
+
+   14 declaration_variable: TOK_ID TOK_COLON . declaration_variable
+
+    TOK_ID  décalage et aller à l'état 15
+
+    declaration_variable  aller à l'état 29
+
+
+État 19
+
+   13 declaration_variable: TOK_ID TOK_COMMA . TOK_TYPE
+
+    TOK_TYPE  décalage et aller à l'état 30
+
+
+État 20
+
+   36 structure_conditionnelle: TOK_IF . expression TOK_THEN bloc_instruction TOK_EIF
+   37                         | TOK_IF . expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+
+    TOK_INT   décalage et aller à l'état 31
+    TOK_PARL  décalage et aller à l'état 32
+    TOK_ID    décalage et aller à l'état 33
+
+    expression  aller à l'état 34
+    operande    aller à l'état 35
+
+
+État 21
+
+   38 structure_iterative: TOK_FOR . TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_ID  décalage et aller à l'état 36
+
+
+État 22
+
+   39 structure_iterative: TOK_WHILE . expression TOK_DO bloc_instruction TOK_EWHILE
+
+    TOK_INT   décalage et aller à l'état 31
+    TOK_PARL  décalage et aller à l'état 32
+    TOK_ID    décalage et aller à l'état 33
+
+    expression  aller à l'état 37
+    operande    aller à l'état 35
+
+
+État 23
+
+   25 instruction: TOK_ID . TOK_PARL arguments TOK_PARR
+   26            | TOK_ID . TOK_EQUAL expression
+
+    TOK_EQUAL  décalage et aller à l'état 38
+    TOK_PARL   décalage et aller à l'état 39
+
+
+État 24
+
+    1 algorithme: algo_definition algo_role declaration debut programme . fin
+
+    TOK_END  décalage et aller à l'état 40
+
+    $défaut  réduction par utilisation de la règle 18 (fin)
+
+    fin  aller à l'état 41
+
+
+État 25
+
+   19 programme: bloc_instruction .
+
+    $défaut  réduction par utilisation de la règle 19 (programme)
+
+
+État 26
+
+   21 bloc_instruction: instruction . bloc_instruction
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 42
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 27
+
+   22 bloc_instruction: structure_conditionnelle . bloc_instruction
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 43
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 28
+
+   23 bloc_instruction: structure_iterative . bloc_instruction
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 44
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 29
+
+   14 declaration_variable: TOK_ID TOK_COLON declaration_variable .
+
+    $défaut  réduction par utilisation de la règle 14 (declaration_variable)
+
+
+État 30
+
+   13 declaration_variable: TOK_ID TOK_COMMA TOK_TYPE .
+
+    $défaut  réduction par utilisation de la règle 13 (declaration_variable)
+
+
+État 31
+
+   35 operande: TOK_INT .
+
+    $défaut  réduction par utilisation de la règle 35 (operande)
+
+
+État 32
+
+   29 expression: TOK_PARL . expression TOK_PARR
+
+    TOK_INT   décalage et aller à l'état 31
+    TOK_PARL  décalage et aller à l'état 32
+    TOK_ID    décalage et aller à l'état 33
+
+    expression  aller à l'état 45
+    operande    aller à l'état 35
+
+
+État 33
+
+   34 operande: TOK_ID .
+
+    $défaut  réduction par utilisation de la règle 34 (operande)
+
+
+État 34
+
+   36 structure_conditionnelle: TOK_IF expression . TOK_THEN bloc_instruction TOK_EIF
+   37                         | TOK_IF expression . TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+
+    TOK_THEN  décalage et aller à l'état 46
+
+
+État 35
+
+   27 expression: operande .
+   28           | operande . TOK_OP expression
+
+    TOK_OP  décalage et aller à l'état 47
+
+    $défaut  réduction par utilisation de la règle 27 (expression)
+
+
+État 36
+
+   38 structure_iterative: TOK_FOR TOK_ID . TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_FROM  décalage et aller à l'état 48
+
+
+État 37
+
+   39 structure_iterative: TOK_WHILE expression . TOK_DO bloc_instruction TOK_EWHILE
+
+    TOK_DO  décalage et aller à l'état 49
+
+
+État 38
+
+   26 instruction: TOK_ID TOK_EQUAL . expression
+
+    TOK_INT   décalage et aller à l'état 31
+    TOK_PARL  décalage et aller à l'état 32
+    TOK_ID    décalage et aller à l'état 33
+
+    expression  aller à l'état 50
+    operande    aller à l'état 35
+
+
+État 39
+
+   25 instruction: TOK_ID TOK_PARL . arguments TOK_PARR
+
+    TOK_STRING  décalage et aller à l'état 51
+    TOK_ID      décalage et aller à l'état 52
+
+    arguments  aller à l'état 53
+    argument   aller à l'état 54
+
+
+État 40
+
+   17 fin: TOK_END .
+
+    $défaut  réduction par utilisation de la règle 17 (fin)
+
+
+État 41
+
+    1 algorithme: algo_definition algo_role declaration debut programme fin .
+
+    $défaut  réduction par utilisation de la règle 1 (algorithme)
+
+
+État 42
+
+   21 bloc_instruction: instruction bloc_instruction .
+
+    $défaut  réduction par utilisation de la règle 21 (bloc_instruction)
+
+
+État 43
+
+   22 bloc_instruction: structure_conditionnelle bloc_instruction .
+
+    $défaut  réduction par utilisation de la règle 22 (bloc_instruction)
+
+
+État 44
+
+   23 bloc_instruction: structure_iterative bloc_instruction .
+
+    $défaut  réduction par utilisation de la règle 23 (bloc_instruction)
+
+
+État 45
+
+   29 expression: TOK_PARL expression . TOK_PARR
+
+    TOK_PARR  décalage et aller à l'état 55
+
+
+État 46
+
+   36 structure_conditionnelle: TOK_IF expression TOK_THEN . bloc_instruction TOK_EIF
+   37                         | TOK_IF expression TOK_THEN . bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 56
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 47
+
+   28 expression: operande TOK_OP . expression
+
+    TOK_INT   décalage et aller à l'état 31
+    TOK_PARL  décalage et aller à l'état 32
+    TOK_ID    décalage et aller à l'état 33
+
+    expression  aller à l'état 57
+    operande    aller à l'état 35
+
+
+État 48
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM . operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_INT  décalage et aller à l'état 31
+    TOK_ID   décalage et aller à l'état 33
+
+    operande  aller à l'état 58
+
+
+État 49
+
+   39 structure_iterative: TOK_WHILE expression TOK_DO . bloc_instruction TOK_EWHILE
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 59
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 50
+
+   26 instruction: TOK_ID TOK_EQUAL expression .
+
+    $défaut  réduction par utilisation de la règle 26 (instruction)
+
+
+État 51
+
+   32 argument: TOK_STRING .
+
+    $défaut  réduction par utilisation de la règle 32 (argument)
+
+
+État 52
+
+   33 argument: TOK_ID .
+
+    $défaut  réduction par utilisation de la règle 33 (argument)
+
+
+État 53
+
+   25 instruction: TOK_ID TOK_PARL arguments . TOK_PARR
+
+    TOK_PARR  décalage et aller à l'état 60
+
+
+État 54
+
+   30 arguments: argument . TOK_COMMA arguments
+   31          | argument .
+
+    TOK_COMMA  décalage et aller à l'état 61
+
+    $défaut  réduction par utilisation de la règle 31 (arguments)
+
+
+État 55
+
+   29 expression: TOK_PARL expression TOK_PARR .
+
+    $défaut  réduction par utilisation de la règle 29 (expression)
+
+
+État 56
+
+   36 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction . TOK_EIF
+   37                         | TOK_IF expression TOK_THEN bloc_instruction . TOK_ELSE bloc_instruction TOK_EIF
+
+    TOK_ELSE  décalage et aller à l'état 62
+    TOK_EIF   décalage et aller à l'état 63
+
+
+État 57
+
+   28 expression: operande TOK_OP expression .
+
+    $défaut  réduction par utilisation de la règle 28 (expression)
+
+
+État 58
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande . TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_TO  décalage et aller à l'état 64
+
+
+État 59
+
+   39 structure_iterative: TOK_WHILE expression TOK_DO bloc_instruction . TOK_EWHILE
+
+    TOK_EWHILE  décalage et aller à l'état 65
+
+
+État 60
+
+   25 instruction: TOK_ID TOK_PARL arguments TOK_PARR .
+
+    $défaut  réduction par utilisation de la règle 25 (instruction)
+
+
+État 61
+
+   30 arguments: argument TOK_COMMA . arguments
+
+    TOK_STRING  décalage et aller à l'état 51
+    TOK_ID      décalage et aller à l'état 52
+
+    arguments  aller à l'état 66
+    argument   aller à l'état 54
+
+
+État 62
+
+   37 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE . bloc_instruction TOK_EIF
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 67
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 63
+
+   36 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF .
+
+    $défaut  réduction par utilisation de la règle 36 (structure_conditionnelle)
+
+
+État 64
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO . operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_INT  décalage et aller à l'état 31
+    TOK_ID   décalage et aller à l'état 33
+
+    operande  aller à l'état 68
+
+
+État 65
+
+   39 structure_iterative: TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE .
+
+    $défaut  réduction par utilisation de la règle 39 (structure_iterative)
+
+
+État 66
+
+   30 arguments: argument TOK_COMMA arguments .
+
+    $défaut  réduction par utilisation de la règle 30 (arguments)
+
+
+État 67
+
+   37 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction . TOK_EIF
+
+    TOK_EIF  décalage et aller à l'état 69
+
+
+État 68
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande . TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_DO  décalage et aller à l'état 70
+
+
+État 69
+
+   37 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF .
+
+    $défaut  réduction par utilisation de la règle 37 (structure_conditionnelle)
+
+
+État 70
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO . bloc_instruction TOK_EFOR
+
+    TOK_IF     décalage et aller à l'état 20
+    TOK_FOR    décalage et aller à l'état 21
+    TOK_WHILE  décalage et aller à l'état 22
+    TOK_ID     décalage et aller à l'état 23
+
+    $défaut  réduction par utilisation de la règle 24 (bloc_instruction)
+
+    bloc_instruction          aller à l'état 71
+    instruction               aller à l'état 26
+    structure_conditionnelle  aller à l'état 27
+    structure_iterative       aller à l'état 28
+
+
+État 71
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction . TOK_EFOR
+
+    TOK_EFOR  décalage et aller à l'état 72
+
+
+État 72
+
+   38 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR .
+
+    $défaut  réduction par utilisation de la règle 38 (structure_iterative)

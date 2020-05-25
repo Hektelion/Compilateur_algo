@@ -9,7 +9,7 @@ MKDIR = ./obj
 FLEX_FILENAME = lexer
 BISON_FILENAME = parser
 
-OBJ_FILES = ./obj/$(FLEX_FILENAME).o ./obj/$(BISON_FILENAME).tab.o ./obj/function.o
+OBJ_FILES = ./obj/$(FLEX_FILENAME).o ./obj/$(BISON_FILENAME).tab.o
 
 TEST_FILES = $(wildcard ./algo/*.algo)
 OUTPUT_FILES = $(patsubst ./algo/%.algo, ./output/%.output, $(TEST_FILES))
