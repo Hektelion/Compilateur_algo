@@ -2,28 +2,52 @@ CC=gcc
 CFLAGS= -I./include
 LDFLAGS= -lfl
 
-EXECUTABLE=executable_test
+EXECUTABLE=compilateur_algo
 
 MKDIR = ./obj
 
-SRC_FILES = $(wildcard ./src/*.c)
-OBJ_FILES = $(patsubst ./src/%.c, ./obj/%.o, $(SRC_FILES))
+FLEX_FILENAME = lexer
+BISON_FILENAME = parser
 
-all : clean $(MKDIR) flex $(EXECUTABLE)
+OBJ_FILES = ./obj/$(FLEX_FILENAME).o ./obj/$(BISON_FILENAME).tab.o ./obj/function.o
+
+TEST_FILES = $(wildcard ./algo/*.algo)
+OUTPUT_FILES = $(patsubst ./algo/%.algo, ./output/%.output, $(TEST_FILES))
+
+all : $(MKDIR) flex bison $(EXECUTABLE)
 
 ./obj :
 	@mkdir $@
 
-flex : ./flex/compilateur.l
-	flex -o ./src/compilateur.c $<
+flex: ./flex/$(FLEX_FILENAME).l
+	flex -o ./src/$(FLEX_FILENAME).c $<
+
+bison : ./bison/$(BISON_FILENAME).y
+	bison --debug -Wall -dv ./bison/$(BISON_FILENAME).y
+	mv ./$(BISON_FILENAME).tab.h ./include
+	mv ./$(BISON_FILENAME).tab.c ./src
+
+exec_test : $(OUTPUT_FILES)
 
 $(EXECUTABLE) : $(OBJ_FILES)
 	$(CC) -o $(EXECUTABLE) $^ $(CFLAGS) $(LDFLAGS)
 #./$(EXECUTABLE) < ./data/fichier.txt
 
-./obj/%.o : ./src/%.c ./include/constant.h
+./obj/%.o : ./src/%.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
+./output/%.output : ./algo/%.algo
+	./$(EXECUTABLE) < $< $@
+
 clean :
-	@rm -f ./obj/*.o
-	@rm -f ./$(EXECUTABLE)
+	@rm -vf ./obj/*.o
+	@rm -vf ./src/$(FLEX_FILENAME).c
+	@rm -vf ./src/$(BISON_FILENAME).tab.c
+	@rm -vf ./include/$(BISON_FILENAME).tab.h
+	@rm -vf ./$(EXECUTABLE)
+
+print-% :
+	@echo $* = $($*)
+
+create_project :
+	@mkdir ./src ./include ./obj

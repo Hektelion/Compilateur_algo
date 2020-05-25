@@ -889,7 +889,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 34 "flex/compilateur.l"
-{
+{							/* VERIFIER LES TOKENS RENVOYE */
 	/* printf("commentaire ignorée : %s\n", yytext); */
 }
 	YY_BREAK
@@ -1058,7 +1058,7 @@ case 23:
 YY_RULE_SETUP
 #line 135 "flex/compilateur.l"
 {
-	return(TOK_EIF);
+	return(TOK_EFOR);
 }
 	YY_BREAK
 case 24:

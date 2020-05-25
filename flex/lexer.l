@@ -31,7 +31,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 
 %%
 
-<DECLARE_ZONE,INITIAL>{commentaire}	{
+<DECLARE_ZONE,INITIAL>{commentaire}	{							/* VERIFIER LES TOKENS RENVOYE */
 	/* printf("commentaire ignorée : %s\n", yytext); */
 }
 
@@ -133,7 +133,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <INITIAL>"fpour" {
-	return(TOK_EIF);
+	return(TOK_EFOR);
 }
 
 <INITIAL>"ftant"	{
