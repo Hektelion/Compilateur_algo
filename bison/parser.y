@@ -13,6 +13,7 @@ extern int nb_line;
 
 %union {
     char *chaine;
+	int nombre;
 }
 
 %define parse.error verbose
@@ -69,13 +70,13 @@ extern int nb_line;
 %token					TOK_WHILE
 %token					TOK_EWHILE
 
-%token					TOK_INT
+%token <nombre>			TOK_INT
 %token					TOK_FLOAT
 %token					TOK_CHAR
 %token					TOK_BOOL
 %token					TOK_STRING
 
-%token					TOK_OP
+%token <chaine>			TOK_OP
 %token					TOK_EQUAL
 
 %token					TOK_PARL
@@ -84,7 +85,7 @@ extern int nb_line;
 %token					TOK_COMMA
 %token					TOK_QUOTE
 
-%token					TOK_ID
+%token <chaine>			TOK_ID
 
 %start                  algorithme
 
@@ -100,7 +101,7 @@ algo_definition: TOK_ALGO TOK_ALGO_NAME { printf("Algorithme definition avec nom
                | %empty                 {  }
                ;
 
-algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC { printf("\tRole avec description : OK\n"); }
+algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC { printf("Role avec description : OK\n"); }
          | TOK_ROLE TOK_COMMA               { printf("\tRole sans description avec comma : OK\n"); }
 		 | TOK_ROLE TOK_ROLE_DESC           { printf("\tRole avec description sans comma : OK\n"); }
          | TOK_ROLE                         { printf("\tRole sans description : OK\n"); }
@@ -131,7 +132,7 @@ programme: bloc_instruction {  }
 bloc_instruction: instruction bloc_instruction {  }
 				| structure_conditionnelle bloc_instruction {  }	
 				| structure_iterative bloc_instruction {  }
-				| %empty {  }
+				| %empty { printf("\tbloc d'instruction : OK\n"); }
 				;
 
 instruction: TOK_ID TOK_PARL arguments TOK_PARR { printf("\tInstruction : OK\n"); }
@@ -139,28 +140,28 @@ instruction: TOK_ID TOK_PARL arguments TOK_PARR { printf("\tInstruction : OK\n")
 		   ;
 
 expression: operande {  }
-		  | operande TOK_OP expression {  }
+		  | operande TOK_OP expression { printf("\t\topérateur %s : OK\n", $2); }
 		  | TOK_PARL expression TOK_PARR {  }
 		  ;
 
 arguments: argument TOK_COMMA arguments {  }
-		 | argument
+		 | argument {  }
 		 ;
 
 argument: TOK_STRING {  }
 		| TOK_ID {  }
 		;
 
-operande: TOK_ID {  }
-		| TOK_INT
+operande: TOK_ID { printf("\t\topérande variable %s : OK\n", $1); }
+		| TOK_INT { printf("\t\topérande nombre %d : OK\n", $1); }
 		;
 
-structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF { printf("\tStructure conditionnelle : OK\n"); }
-						| TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF { printf("\tStructure conditionnelle : OK\n"); }
+structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF { printf("\tStructure conditionnelle si : OK\n"); }
+						| TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF { printf("\tStructure conditionnelle si sinon : OK\n"); }
 						;
 
-structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR { printf("\tStructure itérative : OK\n"); }
-				   | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE { printf("\tStructure itérative : OK\n"); }
+structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR { printf("\titérateur %s : OK\n", $2); printf("\tStructure itérative pour : OK\n");  }
+				   | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE { printf("\tStructure itérative tant que : OK\n"); }
 				   ;
 
 %%

@@ -168,8 +168,9 @@ union YYSTYPE
 #line 14 "./bison/parser.y"
 
     char *chaine;
+	int nombre;
 
-#line 173 "parser.tab.c"
+#line 174 "parser.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -548,11 +549,11 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    95,    95,    98,    99,   100,   103,   104,   105,   106,
-     107,   110,   111,   112,   115,   116,   119,   120,   123,   124,
-     127,   128,   131,   132,   133,   134,   137,   138,   141,   142,
-     143,   146,   147,   150,   151,   154,   155,   158,   159,   162,
-     163
+       0,    96,    96,    99,   100,   101,   104,   105,   106,   107,
+     108,   111,   112,   113,   116,   117,   120,   121,   124,   125,
+     128,   129,   132,   133,   134,   135,   138,   139,   142,   143,
+     144,   147,   148,   151,   152,   155,   156,   159,   160,   163,
+     164
 };
 #endif
 
@@ -1392,229 +1393,241 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 95 "./bison/parser.y"
+#line 96 "./bison/parser.y"
                                                                       { printf("Algorithme : OK\n"); }
-#line 1398 "parser.tab.c"
+#line 1399 "parser.tab.c"
     break;
 
   case 3:
-#line 98 "./bison/parser.y"
+#line 99 "./bison/parser.y"
                                         { printf("Algorithme definition avec nom : OK\n"); }
-#line 1404 "parser.tab.c"
+#line 1405 "parser.tab.c"
     break;
 
   case 4:
-#line 99 "./bison/parser.y"
+#line 100 "./bison/parser.y"
                                         { printf("Algorithme definition sans nom : OK\n"); }
-#line 1410 "parser.tab.c"
+#line 1411 "parser.tab.c"
     break;
 
   case 5:
-#line 100 "./bison/parser.y"
+#line 101 "./bison/parser.y"
                                         {  }
-#line 1416 "parser.tab.c"
+#line 1417 "parser.tab.c"
     break;
 
   case 6:
-#line 103 "./bison/parser.y"
-                                            { printf("\tRole avec description : OK\n"); }
-#line 1422 "parser.tab.c"
+#line 104 "./bison/parser.y"
+                                            { printf("Role avec description : OK\n"); }
+#line 1423 "parser.tab.c"
     break;
 
   case 7:
-#line 104 "./bison/parser.y"
+#line 105 "./bison/parser.y"
                                             { printf("\tRole sans description avec comma : OK\n"); }
-#line 1428 "parser.tab.c"
+#line 1429 "parser.tab.c"
     break;
 
   case 8:
-#line 105 "./bison/parser.y"
+#line 106 "./bison/parser.y"
                                                     { printf("\tRole avec description sans comma : OK\n"); }
-#line 1434 "parser.tab.c"
+#line 1435 "parser.tab.c"
     break;
 
   case 9:
-#line 106 "./bison/parser.y"
+#line 107 "./bison/parser.y"
                                             { printf("\tRole sans description : OK\n"); }
-#line 1440 "parser.tab.c"
+#line 1441 "parser.tab.c"
     break;
 
   case 10:
-#line 107 "./bison/parser.y"
+#line 108 "./bison/parser.y"
                                             {  }
-#line 1446 "parser.tab.c"
+#line 1447 "parser.tab.c"
     break;
 
   case 11:
-#line 110 "./bison/parser.y"
+#line 111 "./bison/parser.y"
                                                 { printf("\tDeclaration : OK\n"); }
-#line 1452 "parser.tab.c"
+#line 1453 "parser.tab.c"
     break;
 
   case 12:
-#line 111 "./bison/parser.y"
+#line 112 "./bison/parser.y"
                                                 { printf("\tDeclaration variable : OK\n"); }
-#line 1458 "parser.tab.c"
+#line 1459 "parser.tab.c"
     break;
 
   case 13:
-#line 112 "./bison/parser.y"
+#line 113 "./bison/parser.y"
                                                 {  }
-#line 1464 "parser.tab.c"
+#line 1465 "parser.tab.c"
     break;
 
   case 14:
-#line 115 "./bison/parser.y"
+#line 116 "./bison/parser.y"
                                                 { printf("\tDeclaration variable : OK\n"); }
-#line 1470 "parser.tab.c"
+#line 1471 "parser.tab.c"
     break;
 
   case 15:
-#line 116 "./bison/parser.y"
+#line 117 "./bison/parser.y"
                                                                                 { printf("\tDeclaration multiple de variables : OK\n"); }
-#line 1476 "parser.tab.c"
+#line 1477 "parser.tab.c"
     break;
 
   case 16:
-#line 119 "./bison/parser.y"
+#line 120 "./bison/parser.y"
                  { printf("Debut : OK\n"); }
-#line 1482 "parser.tab.c"
+#line 1483 "parser.tab.c"
     break;
 
   case 17:
-#line 120 "./bison/parser.y"
+#line 121 "./bison/parser.y"
                  {  }
-#line 1488 "parser.tab.c"
+#line 1489 "parser.tab.c"
     break;
 
   case 18:
-#line 123 "./bison/parser.y"
+#line 124 "./bison/parser.y"
                 { printf("Fin : OK\n"); }
-#line 1494 "parser.tab.c"
+#line 1495 "parser.tab.c"
     break;
 
   case 19:
-#line 124 "./bison/parser.y"
+#line 125 "./bison/parser.y"
                         {  }
-#line 1500 "parser.tab.c"
+#line 1501 "parser.tab.c"
     break;
 
   case 20:
-#line 127 "./bison/parser.y"
+#line 128 "./bison/parser.y"
                             {  }
-#line 1506 "parser.tab.c"
+#line 1507 "parser.tab.c"
     break;
 
   case 21:
-#line 128 "./bison/parser.y"
+#line 129 "./bison/parser.y"
                           {  }
-#line 1512 "parser.tab.c"
+#line 1513 "parser.tab.c"
     break;
 
   case 22:
-#line 131 "./bison/parser.y"
+#line 132 "./bison/parser.y"
                                                {  }
-#line 1518 "parser.tab.c"
+#line 1519 "parser.tab.c"
     break;
 
   case 23:
-#line 132 "./bison/parser.y"
+#line 133 "./bison/parser.y"
                                                                             {  }
-#line 1524 "parser.tab.c"
+#line 1525 "parser.tab.c"
     break;
 
   case 24:
-#line 133 "./bison/parser.y"
+#line 134 "./bison/parser.y"
                                                                        {  }
-#line 1530 "parser.tab.c"
+#line 1531 "parser.tab.c"
     break;
 
   case 25:
-#line 134 "./bison/parser.y"
-                                         {  }
-#line 1536 "parser.tab.c"
+#line 135 "./bison/parser.y"
+                                         { printf("\tbloc d'instruction : OK\n"); }
+#line 1537 "parser.tab.c"
     break;
 
   case 26:
-#line 137 "./bison/parser.y"
+#line 138 "./bison/parser.y"
                                                 { printf("\tInstruction : OK\n"); }
-#line 1542 "parser.tab.c"
+#line 1543 "parser.tab.c"
     break;
 
   case 27:
-#line 138 "./bison/parser.y"
+#line 139 "./bison/parser.y"
                                                  { printf("\tAffectation : OK\n"); }
-#line 1548 "parser.tab.c"
+#line 1549 "parser.tab.c"
     break;
 
   case 28:
-#line 141 "./bison/parser.y"
+#line 142 "./bison/parser.y"
                      {  }
-#line 1554 "parser.tab.c"
+#line 1555 "parser.tab.c"
     break;
 
   case 29:
-#line 142 "./bison/parser.y"
-                                               {  }
-#line 1560 "parser.tab.c"
+#line 143 "./bison/parser.y"
+                                               { printf("\t\topérateur %s : OK\n", (yyvsp[-1].chaine)); }
+#line 1561 "parser.tab.c"
     break;
 
   case 30:
-#line 143 "./bison/parser.y"
+#line 144 "./bison/parser.y"
                                                  {  }
-#line 1566 "parser.tab.c"
+#line 1567 "parser.tab.c"
     break;
 
   case 31:
-#line 146 "./bison/parser.y"
+#line 147 "./bison/parser.y"
                                         {  }
-#line 1572 "parser.tab.c"
+#line 1573 "parser.tab.c"
+    break;
+
+  case 32:
+#line 148 "./bison/parser.y"
+                            {  }
+#line 1579 "parser.tab.c"
     break;
 
   case 33:
-#line 150 "./bison/parser.y"
+#line 151 "./bison/parser.y"
                      {  }
-#line 1578 "parser.tab.c"
+#line 1585 "parser.tab.c"
     break;
 
   case 34:
-#line 151 "./bison/parser.y"
+#line 152 "./bison/parser.y"
                          {  }
-#line 1584 "parser.tab.c"
+#line 1591 "parser.tab.c"
     break;
 
   case 35:
-#line 154 "./bison/parser.y"
-                 {  }
-#line 1590 "parser.tab.c"
+#line 155 "./bison/parser.y"
+                 { printf("\t\topérande variable %s : OK\n", (yyvsp[0].chaine)); }
+#line 1597 "parser.tab.c"
+    break;
+
+  case 36:
+#line 156 "./bison/parser.y"
+                          { printf("\t\topérande nombre %d : OK\n", (yyvsp[0].nombre)); }
+#line 1603 "parser.tab.c"
     break;
 
   case 37:
-#line 158 "./bison/parser.y"
-                                                                              { printf("\tStructure conditionnelle : OK\n"); }
-#line 1596 "parser.tab.c"
+#line 159 "./bison/parser.y"
+                                                                              { printf("\tStructure conditionnelle si : OK\n"); }
+#line 1609 "parser.tab.c"
     break;
 
   case 38:
-#line 159 "./bison/parser.y"
-                                                                                                                                { printf("\tStructure conditionnelle : OK\n"); }
-#line 1602 "parser.tab.c"
+#line 160 "./bison/parser.y"
+                                                                                                                                { printf("\tStructure conditionnelle si sinon : OK\n"); }
+#line 1615 "parser.tab.c"
     break;
 
   case 39:
-#line 162 "./bison/parser.y"
-                                                                                                       { printf("\tStructure itérative : OK\n"); }
-#line 1608 "parser.tab.c"
+#line 163 "./bison/parser.y"
+                                                                                                       { printf("\titérateur %s : OK\n", (yyvsp[-7].chaine)); printf("\tStructure itérative pour : OK\n");  }
+#line 1621 "parser.tab.c"
     break;
 
   case 40:
-#line 163 "./bison/parser.y"
-                                                                                             { printf("\tStructure itérative : OK\n"); }
-#line 1614 "parser.tab.c"
+#line 164 "./bison/parser.y"
+                                                                                             { printf("\tStructure itérative tant que : OK\n"); }
+#line 1627 "parser.tab.c"
     break;
 
 
-#line 1618 "parser.tab.c"
+#line 1631 "parser.tab.c"
 
       default: break;
     }
@@ -1846,7 +1859,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 166 "./bison/parser.y"
+#line 167 "./bison/parser.y"
 
 
 int yyerror (const char *msg) {

@@ -96,19 +96,19 @@ Terminaux, suivis des règles où ils apparaissent
     TOK_EFOR (275) 38
     TOK_WHILE (276) 39
     TOK_EWHILE (277) 39
-    TOK_INT (278) 35
+    TOK_INT <nombre> (278) 35
     TOK_FLOAT (279)
     TOK_CHAR (280)
     TOK_BOOL (281)
     TOK_STRING (282) 32
-    TOK_OP (283) 28
+    TOK_OP <chaine> (283) 28
     TOK_EQUAL (284) 26
     TOK_PARL (285) 25 29
     TOK_PARR (286) 25 29
     TOK_COLON (287) 14
     TOK_COMMA (288) 5 6 13 30
     TOK_QUOTE (289)
-    TOK_ID (290) 13 14 25 26 33 34 38
+    TOK_ID <chaine> (290) 13 14 25 26 33 34 38
 
 
 Non-terminaux, suivis des règles où ils apparaissent

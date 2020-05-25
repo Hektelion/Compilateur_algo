@@ -92,8 +92,9 @@ union YYSTYPE
 #line 14 "./bison/parser.y"
 
     char *chaine;
+	int nombre;
 
-#line 97 "parser.tab.h"
+#line 98 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

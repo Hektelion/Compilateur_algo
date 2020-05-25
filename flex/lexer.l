@@ -89,10 +89,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <WHILE_DEF,FOR_DEF,IF_DEF_ZONE>{operateur_booleen}	{
-	return(TOK_OP);
-}
-
-<INITIAL>{operateur_arithmetique}	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_OP);
 }
 
@@ -157,7 +154,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_EQUAL);
 }
 
-<INITIAL>"(" {
+<INITIAL,IF_DEF_ZONE>"(" {
 	return(TOK_PARL);
 }
 
@@ -165,7 +162,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_COMMA);
 }
 
-<INITIAL>")" {
+<INITIAL,IF_DEF_ZONE>")" {
 	return(TOK_PARR);
 }
 
@@ -191,11 +188,19 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	return(TOK_DO);
 }
 
+<INITIAL,IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{operateur_arithmetique}	{
+	yylval.chaine = strdup(yytext);
+	return(TOK_OP);
+}
+
+
 <INITIAL,DECLARE_ZONE,IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{identifiant} {
+	yylval.chaine = strdup(yytext);
 	return(TOK_ID);
 }
 
 <IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{nombre} {
+	yylval.nombre = atoi(yytext);
 	return(TOK_INT);
 }
 
