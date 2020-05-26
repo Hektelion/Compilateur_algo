@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS= -I./include
-LDFLAGS= -lfl
+LDFLAGS= -lfl 
 
 EXECUTABLE=compilateur_algo
 

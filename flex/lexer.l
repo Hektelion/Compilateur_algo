@@ -49,7 +49,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 	BEGIN(INITIAL);
 	strcat(chaine, "\"");
 	yytext = chaine;
-	//ENVOYER LA CHAINE FINAL VERS LE PARSER
+	yylval.chaine = strdup(yytext);
 	return(TOK_STRING);
 }
 
@@ -58,15 +58,18 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <INITIAL>"Algorithme" {
+	yylval.chaine = strdup(yytext);
 	BEGIN(DECL_ALGO);
 	return(TOK_ALGO);
 }
 
 <DECL_ALGO>.*	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_ALGO_NAME);
 }
 
 <INITIAL>"Role"	{
+	yylval.chaine = strdup(yytext);
 	BEGIN(DEF_ROLE);
 	return(TOK_ROLE);
 }
@@ -76,10 +79,12 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <DEF_ROLE>":"	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_COMMA);
 }
 
 <DEF_ROLE>.*	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_ROLE_DESC);
 }
 
@@ -89,92 +94,118 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <INITIAL>"Declaration"	{
+	yylval.chaine = strdup(yytext);
 	BEGIN(DECLARE_ZONE);
 	return(TOK_DECLARE);
 }
 
 <DECLARE_ZONE>"Debut"	{
+	yylval.chaine = strdup(yytext);
 	BEGIN(INITIAL);
 	return(TOK_BEGIN);
 }
 
 <DECLARE_ZONE>":"	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_COMMA);
 }
 
 <DECLARE_ZONE>","	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_COLON);
 }
 
 <DECLARE_ZONE>{type}	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_TYPE);
 }
 
 <INITIAL>"Fin" {
+	yylval.chaine = strdup(yytext);
 	return(TOK_END);
 }
 
 <INITIAL>"pour" {
+	yylval.chaine = strdup(yytext);
 	BEGIN(FOR_DEF);
 	return(TOK_FOR);
 }
 
 <INITIAL>"tant"[ ]*"que"	{
+	yylval.chaine = strdup(yytext);
 	BEGIN(WHILE_DEF);
 	return(TOK_WHILE); 
 }
 
 <INITIAL>"sinon" {
+	yylval.chaine = strdup(yytext);
 	return(TOK_ELSE);
 }
 
 <INITIAL>"si" {
+	yylval.chaine = strdup(yytext);
 	BEGIN(IF_DEF_ZONE);
 	return(TOK_IF);
 }
 
 <INITIAL>"fpour" {
+	yylval.chaine = strdup(yytext);
 	return(TOK_EFOR);
 }
 
 <INITIAL>"ftant"	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_EWHILE);
 }
 
 <INITIAL>"fsi"	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_EIF);
 }
 
 <INITIAL>"="	{
+	yylval.chaine = strdup(yytext);
 	return(TOK_EQUAL);
 }
 
 <INITIAL,IF_DEF_ZONE>"(" {
+	yylval.chaine = strdup(yytext);
 	return(TOK_PARL);
 }
 
 <INITIAL>"," {
+	yylval.chaine = strdup(yytext);
 	return(TOK_COMMA);
 }
 
 <INITIAL,IF_DEF_ZONE>")" {
+	yylval.chaine = strdup(yytext);
 	return(TOK_PARR);
 }
 
-<FOR_DEF>"par"[ ]*"pas"[ ]*"de" { return(TOK_BY_STEP); }
+<FOR_DEF>"par"[ ]*"pas"[ ]*"de" {
+	yylval.chaine = strdup(yytext);
+	return(TOK_BY_STEP);
+}
 
-<FOR_DEF>"de" { return(TOK_FROM); }
+<FOR_DEF>"de" {
+	yylval.chaine = strdup(yytext);
+	return(TOK_FROM);
+}
 
 <FOR_DEF>"a" {
+	yylval.chaine = strdup(yytext);
 	return(TOK_TO);
 }
 
 <IF_DEF_ZONE>"alors" {
+	yylval.chaine = strdup(yytext);
 	BEGIN(INITIAL);
 	return(TOK_THEN);
 }
 
 <FOR_DEF,WHILE_DEF>"faire" {
+	yylval.chaine = strdup(yytext);
 	BEGIN(INITIAL);
 	return(TOK_DO);
 }

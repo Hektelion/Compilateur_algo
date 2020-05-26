@@ -82,3 +82,21 @@ ainsi qu'une première version de l'analyseur
 
 ### Parser
  - regler le problème d'ambiguité sur la grammair du parser
+
+ -----------------------------
+
+# 26 mai 2020
+
+## Travail réalisé
+
+### Parser
+ - retrait de l'ambiguïté sur la grammaire
+
+## Difficultés recontrées
+
+## Travail à faire maintenant
+
+### Parser
+ - 
+
+ -----------------------------
