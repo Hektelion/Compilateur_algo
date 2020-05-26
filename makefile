@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -I./include
+CFLAGS= -I./include `pkg-config --cflags glib-2.0`
 LDFLAGS= -lfl 
 
 EXECUTABLE=compilateur_algo
