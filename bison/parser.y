@@ -4,11 +4,24 @@
 #include <stdio.h>
 #include <include.h>
 
-char *msg;
+typedef struct Variable {
+	char *type;
+	void *value;
+}Variable;
+
+void init();
+void cleanup();
+
+int yyerror(const char *msg);
 
 extern int nb_line;
+char *msg;
 
+char *type;
 
+GHashTable* var_hash_table;
+
+Variable *var;
 
 %}
 
@@ -44,7 +57,7 @@ extern int nb_line;
 
 /* token */
 
-%token <chaine>			TOK_ALGO
+%token <chaine>		TOK_ALGO
 %token <chaine>		TOK_ALGO_NAME
 
 %token <chaine>		TOK_ROLE
@@ -85,7 +98,6 @@ extern int nb_line;
 %token <chaine>		TOK_PARR
 %token <chaine> 	TOK_COLON
 %token <chaine>		TOK_COMMA
-%token <chaine>		TOK_QUOTE
 
 %token <chaine>		TOK_ID
 
@@ -95,78 +107,139 @@ extern int nb_line;
 
 /* Regle */
 
-algorithme: algo_definition algo_role declaration debut programme fin { printf(" <algorithme> \t -> \t Algorithme : OK\n"); }
-          ;
+algorithme	: algo_definition algo_role declaration debut programme fin {
+				printf(" <algorithme> \t -> \t Algorithme : OK\n");
+			}
+          	;
 
-algo_definition: TOK_ALGO TOK_ALGO_NAME { printf(" <algo_definition> \t -> \t %s %s\n", $1, $2); }
-               | TOK_ALGO               { printf(" <algo_definition> \t -> \t %s\n", $1);  }
-               | %empty                 { printf(" <algo_definition> \t -> \t algo_definition : [EMPTY]\n"); }
+algo_definition: TOK_ALGO TOK_ALGO_NAME {  }
+               | TOK_ALGO               {  }
+               | %empty                 {  }
                ;
 
-algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC { printf(" <algo_role> \t -> \t %s : %s\n", $1, $3);  }
-         | TOK_ROLE TOK_COMMA               { printf(" <algo_role> \t -> \t %s :\n", $1); }
-		 | TOK_ROLE TOK_ROLE_DESC           { printf(" <algo_role> \t -> \t %s %s\n", $1, $2); }
-         | TOK_ROLE                         { printf(" <algo_role> \t -> \t %s\n",$1); }
-         | %empty                           { printf(" <algo_role> \t -> \t algo_role : [EMPTY]\n"); }
+algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC {  }
+         | TOK_ROLE TOK_COMMA               {  }
+		 | TOK_ROLE TOK_ROLE_DESC           {  }
+         | TOK_ROLE                         {  }
+         | %empty                           {  }
          ;
 
-declaration: TOK_DECLARE declaration            	{ printf(" <declaration> \t -> \t %s <declaration>\n", $1); }
-           | TOK_ID TOK_COLON declaration  			{ printf(" <declaration> \t -> \t %s %s <declaration>\n", $1, $2); }
-		   | TOK_ID TOK_COMMA TOK_TYPE declaration	{ printf(" <declaration> \t -> \t %s %s %s <declaration>\n", $1, $2, $3); }
-           | %empty                             	{ printf(" <declaration> \t -> \t declaration : [EMPTY]\n"); }
-           ;
+declaration : TOK_DECLARE declaration {
+				printf("Fin declaration\n");
+				//printf("%s\n", $2);
+		   	}
+		   	| TOK_ID TOK_COMMA TOK_TYPE declaration {
+				var = malloc(sizeof(Variable));
+				if(var == NULL) {
+					perror("malloc");
+					exit(EXIT_FAILURE);
+				}
 
-debut: TOK_BEGIN { printf(" <debut> \t -> \t %s\n", $1); }
+				type = strdup($3); //LES VARIABLES UTILISE LA MEME ADRESSE POUR LE TYPE DANS LA TABLE DE HASHAGE
+				var->type = type;
+
+				if(g_hash_table_insert(var_hash_table, strdup($1), var)) {
+					printf("\tdeclaration de %s réussi\n", $1);					
+				}
+				else {
+					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", $1);
+				}
+		   	}
+           	| TOK_ID TOK_COLON declaration {
+				var = malloc(sizeof(Variable));
+				if(var == NULL) {
+					perror("malloc");
+					exit(EXIT_FAILURE);
+				}
+
+				var->type = type;
+
+				if(g_hash_table_insert(var_hash_table, strdup($1), var)) {
+					printf("\tdeclaration de %s réussi\n", $1);		
+				}
+				else {
+					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", $1);
+				}
+		   	}
+           	| %empty { printf("Debut declaration\n"); }
+           	;
+
+debut: TOK_BEGIN { printf("Debut du programme\n"); }
      ;
 
-fin: TOK_END { printf(" <fin> \t -> \t %s\n", $1); }
+fin: TOK_END { printf("Fin du programme\n"); }
    ;
 
-programme: bloc_instruction { printf(" <programme> \t -> \t <bloc_instruction>\n"); }
+programme: bloc_instruction {  }
          ;
 
-bloc_instruction: instruction bloc_instruction { printf(" <bloc_instruction> \t -> \t <instruction> <bloc_instruction>\n"); }
-				| structure_conditionnelle bloc_instruction { printf(" <bloc_instruction> \t -> \t <structure_conditionnelle> <bloc_instruction>\n");  }	
-				| structure_iterative bloc_instruction { printf(" <bloc_instruction> \t -> \t <structure_iterative> <bloc_instruction>\n");  }
-				| %empty { printf(" <bloc_instruction> \t -> \t bloc_instruction : [EMPTY]\n"); }
+bloc_instruction: instruction bloc_instruction {  }
+				| structure_conditionnelle bloc_instruction {  }	
+				| structure_iterative bloc_instruction {  }
+				| %empty {  }
 				;
 
-instruction: TOK_ID TOK_PARL arguments TOK_PARR { printf(" <instruction> \t -> \t %s %s <arguments> %s\n", $1, $2, $4); }
-		   | TOK_ID TOK_EQUAL expression { printf(" <instruction> \t -> \t %s %s <expression>\n", $1, $2); }
+instruction: TOK_ID TOK_PARL arguments TOK_PARR {  }
+		   | TOK_ID TOK_EQUAL expression {  }
 		   ;
 
-expression: operande { printf(" <expression> \t -> \t <operande>\n"); }
-		  | operande TOK_OP expression { printf(" <expression> \t -> \t <operande> %s <expression>\n", $2); }
-		  | TOK_PARL expression TOK_PARR { printf(" <expression> \t -> \t %s <expression> %s\n", $1, $3); }
+expression: operande {  }
+		  | operande TOK_OP expression {  }
+		  | TOK_PARL expression TOK_PARR {  }
 		  ;
 
-arguments: argument TOK_COMMA arguments { printf(" <arguments> \t -> \t <argument> %s <arguments>\n", $2); }
-		 | argument { printf(" <arguments> \t -> \t <argument>\n"); }
+arguments: argument TOK_COMMA arguments {  }
+		 | argument {  }
 		 ;
 
-argument: TOK_STRING { printf(" <argument> \t -> \t %s\n", $1); }
-		| TOK_ID { printf(" <argument> \t -> \t %s\n", $1); }
+argument: TOK_STRING {  }
+		| TOK_ID {  }
+		| TOK_INT {  }
+		| TOK_FLOAT {  }
+		| TOK_CHAR {  }
+		| TOK_BOOL {  }
 		;
 
-operande: TOK_ID { printf(" <operande> \t -> \t %s\n", $1); }
-		| TOK_INT { printf(" <operande> \t -> \t %d\n", $1); }
+operande: TOK_ID {  }
+		| TOK_INT {  }
+		| TOK_FLOAT {  }
+		| TOK_CHAR {  }
+		| TOK_BOOL {  }
 		;
 
-structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF { printf(" <structure_conditionnelle> \t -> \t %s <expression> %s <bloc_instruction> %s\n", $1, $3, $5); }
-						| TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF { printf(" <structure_conditionnelle> \t -> \t %s <expression> %s <bloc_instruction> %s <bloc_instruction> %s\n", $1, $3, $5, $7); }
+structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF {  }
+						| TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF {  }
 						;
 
-structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR { printf(" <structure_iterative> \t -> \t %s %s %s <operande> %s <operande> %s <bloc_instruction> %s\n", $1, $2, $3, $5, $7, $9); }
-				   | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR { printf(" <structure_iterative> \t -> \t %s %s %s <operande> %s <operande> %s <operande> %s <bloc_instruction> %s\n", $1, $2, $3, $5, $7, $9, $11); }
-				   | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE { printf(" <structure_iterative> \t -> \t %s <expression> %s <bloc_instruction> %s\n", $1, $3, $5); }
+structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR {  }
+				   | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR {  }
+				   | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE {  }
 				   ;
 
 %%
 
-int yyerror (const char *msg) {
-    fprintf(stderr, "ERREUR(%d) : %s\n", nb_line, msg);
+int main (int argc, char* argv[]) {
+	
+	init();
+
+    yyparse();
+
+	cleanup();
+
+	return EXIT_SUCCESS;
 }
 
-int main (int argc, char* argv[]) {
-    yyparse();
+void init() {
+	if( (var_hash_table = g_hash_table_new(g_str_hash, g_str_equal)) == NULL )
+		perror("g_hash_table_new");
+	else
+		printf("Table de hachage crée avec succes\n");
+}
+
+void cleanup() {
+	g_hash_table_destroy(var_hash_table);
+}
+
+int yyerror (const char *msg) {
+    fprintf(stderr, "ERREUR(%d) : %s\n", nb_line, msg);
 }

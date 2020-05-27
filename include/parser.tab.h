@@ -80,8 +80,7 @@ extern int yydebug;
     TOK_PARR = 286,
     TOK_COLON = 287,
     TOK_COMMA = 288,
-    TOK_QUOTE = 289,
-    TOK_ID = 290
+    TOK_ID = 289
   };
 #endif
 
@@ -89,12 +88,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "./bison/parser.y"
+#line 30 "./bison/parser.y"
 
     char *chaine;
 	int nombre;
 
-#line 98 "parser.tab.h"
+#line 97 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -426,10 +426,10 @@ static const YY_CHAR yy_ec[256] =
 static const YY_CHAR yy_meta[46] =
     {   0,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        3,    3,    3,    3,    3,    4,    3,    3,    3,    3,
-        3,    3,    3,    3,    3,    3,    3,    3,    3,    3,
-        3,    3,    3,    3,    3
+        1,    1,    1,    1,    1,    3,    1,    1,    1,    1,
+        4,    4,    4,    4,    4,    3,    4,    4,    4,    4,
+        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
+        4,    4,    4,    4,    4
     } ;
 
 static const flex_int16_t yy_base[211] =
@@ -456,7 +456,7 @@ static const flex_int16_t yy_base[211] =
       166,  164,    0,  160,  151,  184,  336,    0,  149,  157,
         0,  158,  142,  156,  149,   29,   39,   27,   37,  336,
 
-      336,  213,  217,  221,  225,   62,  227,  231,  235,  237
+      336,  213,  217,  221,  225,   61,  227,  231,  235,  237
     } ;
 
 static const flex_int16_t yy_def[211] =
@@ -592,8 +592,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "./flex/lexer.l"
-#line 2 "./flex/lexer.l"
+#line 1 "flex/lexer.l"
+#line 2 "flex/lexer.l"
 
 #include <string.h>
 
@@ -835,7 +835,7 @@ YY_DECL
 		}
 
 	{
-#line 36 "./flex/lexer.l"
+#line 36 "flex/lexer.l"
 
 
 #line 842 "./src/lexer.c"
@@ -897,14 +897,14 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 38 "./flex/lexer.l"
+#line 38 "flex/lexer.l"
 {							/* VERIFIER LES TOKENS RENVOYE */
 	/* printf("commentaire ignorée : %s\n", yytext); */
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 42 "./flex/lexer.l"
+#line 42 "flex/lexer.l"
 { /* concatené les éléments */
 	BEGIN(STRING);
 	memset(chaine, 0, strlen(chaine));
@@ -913,7 +913,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 48 "./flex/lexer.l"
+#line 48 "flex/lexer.l"
 {
 	BEGIN(INITIAL);
 	strcat(chaine, "\"");
@@ -924,14 +924,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 56 "./flex/lexer.l"
+#line 56 "flex/lexer.l"
 {
 	strcat(chaine, yytext);
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 60 "./flex/lexer.l"
+#line 60 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(DECL_ALGO);
@@ -940,7 +940,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 66 "./flex/lexer.l"
+#line 66 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_ALGO_NAME);
@@ -948,7 +948,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 71 "./flex/lexer.l"
+#line 71 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(DEF_ROLE);
@@ -957,14 +957,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 77 "./flex/lexer.l"
+#line 77 "flex/lexer.l"
 {
 	
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 81 "./flex/lexer.l"
+#line 81 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_COMMA);
@@ -972,7 +972,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 86 "./flex/lexer.l"
+#line 86 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_ROLE_DESC);
@@ -981,7 +981,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 91 "./flex/lexer.l"
+#line 91 "flex/lexer.l"
 {
 	nb_line++;
 	BEGIN(INITIAL);
@@ -989,7 +989,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 96 "./flex/lexer.l"
+#line 96 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(DECLARE_ZONE);
@@ -998,7 +998,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 102 "./flex/lexer.l"
+#line 102 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(INITIAL);
@@ -1007,7 +1007,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 108 "./flex/lexer.l"
+#line 108 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_COMMA);
@@ -1015,7 +1015,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 113 "./flex/lexer.l"
+#line 113 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_COLON);
@@ -1023,7 +1023,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 118 "./flex/lexer.l"
+#line 118 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_TYPE);
@@ -1031,7 +1031,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 123 "./flex/lexer.l"
+#line 123 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_END);
@@ -1039,7 +1039,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 128 "./flex/lexer.l"
+#line 128 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(FOR_DEF);
@@ -1048,7 +1048,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 134 "./flex/lexer.l"
+#line 134 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(WHILE_DEF);
@@ -1057,7 +1057,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 140 "./flex/lexer.l"
+#line 140 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_ELSE);
@@ -1065,7 +1065,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 145 "./flex/lexer.l"
+#line 145 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(IF_DEF_ZONE);
@@ -1074,7 +1074,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 151 "./flex/lexer.l"
+#line 151 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_EFOR);
@@ -1082,7 +1082,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 156 "./flex/lexer.l"
+#line 156 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_EWHILE);
@@ -1090,7 +1090,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 161 "./flex/lexer.l"
+#line 161 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_EIF);
@@ -1098,7 +1098,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 166 "./flex/lexer.l"
+#line 166 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_EQUAL);
@@ -1106,7 +1106,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 171 "./flex/lexer.l"
+#line 171 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_PARL);
@@ -1114,7 +1114,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 176 "./flex/lexer.l"
+#line 176 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_COMMA);
@@ -1122,7 +1122,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 181 "./flex/lexer.l"
+#line 181 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_PARR);
@@ -1130,7 +1130,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 186 "./flex/lexer.l"
+#line 186 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_BY_STEP);
@@ -1138,7 +1138,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 191 "./flex/lexer.l"
+#line 191 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_FROM);
@@ -1146,7 +1146,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 196 "./flex/lexer.l"
+#line 196 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_TO);
@@ -1154,7 +1154,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 201 "./flex/lexer.l"
+#line 201 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(INITIAL);
@@ -1163,7 +1163,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 207 "./flex/lexer.l"
+#line 207 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	BEGIN(INITIAL);
@@ -1172,7 +1172,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 213 "./flex/lexer.l"
+#line 213 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_OP);
@@ -1180,7 +1180,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 218 "./flex/lexer.l"
+#line 218 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_OP);
@@ -1188,7 +1188,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 224 "./flex/lexer.l"
+#line 224 "flex/lexer.l"
 {
 	yylval.chaine = strdup(yytext);
 	return(TOK_ID);
@@ -1196,7 +1196,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 229 "./flex/lexer.l"
+#line 229 "flex/lexer.l"
 {
 	yylval.nombre = atoi(yytext);
 	return(TOK_INT);
@@ -1204,7 +1204,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 234 "./flex/lexer.l"
+#line 234 "flex/lexer.l"
 {
 
 }
@@ -1212,27 +1212,27 @@ YY_RULE_SETUP
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 238 "./flex/lexer.l"
+#line 238 "flex/lexer.l"
 {
 	nb_line++;
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 242 "./flex/lexer.l"
+#line 242 "flex/lexer.l"
 {
 	printf("Non reconnu : %s\n", yytext);
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 246 "./flex/lexer.l"
+#line 246 "flex/lexer.l"
 {
 	yyterminate();
 }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 250 "./flex/lexer.l"
+#line 250 "flex/lexer.l"
 ECHO;
 	YY_BREAK
 #line 1239 "./src/lexer.c"
@@ -2246,7 +2246,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 250 "./flex/lexer.l"
+#line 250 "flex/lexer.l"
 
 
 /*
@@ -2327,7 +2327,6 @@ void debug_token(int v_token) {
 		case TOK_PARR: printf("TOK_PARR");  break;
 		case TOK_COLON: printf("TOK_COLON");  break;
 		case TOK_COMMA: printf("TOK_COMMA");  break;
-		case TOK_QUOTE: printf("TOK_QUOTE");  break;
 
 		case TOK_ID: printf("TOK_ID");  break;
 

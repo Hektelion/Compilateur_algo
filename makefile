@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -I./include `pkg-config --cflags glib-2.0`
+CFLAGS= -I./include `pkg-config --cflags --libs glib-2.0`
 LDFLAGS= -lfl 
 
 EXECUTABLE=compilateur_algo
@@ -51,3 +51,5 @@ print-% :
 
 create_project :
 	@mkdir ./src ./include ./obj
+
+.PHONY: flex bison clean

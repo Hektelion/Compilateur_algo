@@ -27,7 +27,7 @@ int nb_line=1;
 %x IF_DEF_ZONE
 
 commentaire         	((\/\/|#).*)
-identifiant				-[a-z|A-Z][a-z|A-Z|_]*|[a-z|A-Z][a-z|A-Z|_]*
+identifiant				-[a-z|A-Z][a-z|A-Z|0-9|_]*|[a-z|A-Z][a-z|A-Z|0-9|_]*
 nombre					-[0-9]+|[0-9]+
 type					("entier"|"reel"|"caractere"|"booleen"|"chaine de caractere")
 operateur_booleen		("=="|"!="|">"|"<"|">="|"<=")
@@ -327,7 +327,6 @@ void debug_token(int v_token) {
 		case TOK_PARR: printf("TOK_PARR");  break;
 		case TOK_COLON: printf("TOK_COLON");  break;
 		case TOK_COMMA: printf("TOK_COMMA");  break;
-		case TOK_QUOTE: printf("TOK_QUOTE");  break;
 
 		case TOK_ID: printf("TOK_ID");  break;
 

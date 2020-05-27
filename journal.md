@@ -81,7 +81,7 @@ ainsi qu'une première version de l'analyseur
 ## Travail à faire maintenant
 
 ### Parser
- - regler le problème d'ambiguité sur la grammair du parser
+ - regler le problème d'ambiguité sur la grammaire du parser
 
  -----------------------------
 
@@ -91,8 +91,31 @@ ainsi qu'une première version de l'analyseur
 
 ### Parser
  - retrait de l'ambiguïté sur la grammaire
+ - ajout d'une table de hachage pour les variables
 
 ## Difficultés recontrées
+
+### Parser
+ - la déclaration multiple de variables pose un problème
+
+## Travail à faire maintenant
+
+### Parser
+ - regler le probleme des declaration multiple
+
+ -----------------------------
+
+ # 27 mai 2020
+
+## Travail réalisé
+
+### Parser
+ - 
+
+## Difficultés recontrées
+
+### Parser
+ - 
 
 ## Travail à faire maintenant
 
