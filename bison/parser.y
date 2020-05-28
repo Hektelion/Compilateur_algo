@@ -28,8 +28,11 @@ Variable *var;
 /* typage des tokens */
 
 %union {
+	int entier;
+	float reel;
+	int booleen;
+	char caractere;
     char *chaine;
-	int nombre;
 }
 
 %define parse.error verbose
@@ -85,7 +88,7 @@ Variable *var;
 %token <chaine>		TOK_WHILE
 %token <chaine>		TOK_EWHILE
 
-%token <nombre>		TOK_INT
+%token <entier>		TOK_INT
 %token <chaine>		TOK_FLOAT
 %token <chaine>		TOK_CHAR
 %token <chaine>		TOK_BOOL

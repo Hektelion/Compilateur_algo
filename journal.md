@@ -110,7 +110,8 @@ ainsi qu'une première version de l'analyseur
 ## Travail réalisé
 
 ### Parser
- - 
+ - ajout des entrées dans la table de hashage
+ - clarification des logs du compilateur
 
 ## Difficultés recontrées
 
