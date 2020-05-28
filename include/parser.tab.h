@@ -90,10 +90,15 @@ union YYSTYPE
 {
 #line 30 "./bison/parser.y"
 
+	int entier;
+	float reel;
+	int booleen;
+	char caractere;
     char *chaine;
-	int nombre;
 
-#line 97 "parser.tab.h"
+	GNode *noeud;
+
+#line 102 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

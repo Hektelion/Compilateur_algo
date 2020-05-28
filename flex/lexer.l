@@ -227,7 +227,7 @@ operateur_arithmetique	("+"|"-"|"*"|"/"|"%")
 }
 
 <IF_DEF_ZONE,FOR_DEF,WHILE_DEF>{nombre} {
-	yylval.nombre = atoi(yytext);
+	yylval.chaine =  strdup(yytext);
 	return(TOK_INT);
 }
 

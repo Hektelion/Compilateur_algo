@@ -75,7 +75,7 @@
 
 typedef struct Variable {
 	char *type;
-	void *value;
+	GNode *value;
 }Variable;
 
 void init();
@@ -182,10 +182,15 @@ union YYSTYPE
 {
 #line 30 "./bison/parser.y"
 
+	int entier;
+	float reel;
+	int booleen;
+	char caractere;
     char *chaine;
-	int nombre;
 
-#line 189 "parser.tab.c"
+	GNode *noeud;
+
+#line 194 "parser.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -504,16 +509,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   73
+#define YYLAST   77
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  35
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  16
+#define YYNNTS  15
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  44
+#define YYNRULES  39
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  85
+#define YYNSTATES  80
 
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   289
@@ -561,13 +566,12 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
-       0,   110,   110,   115,   116,   117,   120,   121,   122,   123,
-     124,   127,   131,   148,   164,   167,   170,   173,   176,   177,
-     178,   179,   182,   183,   186,   187,   188,   191,   192,   195,
-     196,   197,   198,   199,   200,   203,   204,   205,   206,   207,
-     210,   211,   214,   215,   216
+       0,   115,   115,   125,   126,   127,   130,   131,   132,   133,
+     134,   137,   142,   164,   184,   190,   193,   196,   201,   206,
+     211,   216,   222,   229,   234,   242,   249,   257,   264,   269,
+     274,   278,   284,   288,   294,   300,   304,   308,   312,   316
 };
 #endif
 
@@ -583,9 +587,9 @@ static const char *const yytname[] =
   "TOK_INT", "TOK_FLOAT", "TOK_CHAR", "TOK_BOOL", "TOK_STRING", "TOK_OP",
   "TOK_EQUAL", "TOK_PARL", "TOK_PARR", "TOK_COLON", "TOK_COMMA", "TOK_ID",
   "$accept", "algorithme", "algo_definition", "algo_role", "declaration",
-  "debut", "fin", "programme", "bloc_instruction", "instruction",
-  "expression", "arguments", "argument", "operande",
-  "structure_conditionnelle", "structure_iterative", YY_NULLPTR
+  "debut", "fin", "bloc_instruction", "instruction",
+  "structure_conditionnelle", "structure_iterative", "arguments",
+  "argument", "expression", "operande", YY_NULLPTR
 };
 #endif
 
@@ -601,7 +605,7 @@ static const yytype_int16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF (-44)
+#define YYPACT_NINF (-40)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -615,15 +619,14 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      15,    25,    32,    30,   -44,   -44,    -2,    -1,   -44,    37,
-      -1,    -6,    48,   -44,   -44,    -1,    47,   -44,     2,   -44,
-      -1,   -14,    24,   -14,    20,    50,   -44,     2,     2,     2,
-     -44,   -44,   -44,   -44,   -44,   -14,   -44,    49,    33,    44,
-      45,   -14,    14,   -44,   -44,   -44,   -44,   -44,    35,     2,
-     -14,    21,     2,   -44,   -44,   -44,   -44,   -44,   -44,   -44,
-      36,    38,   -44,    -7,   -44,    46,    43,   -44,    14,     2,
-     -44,    21,   -44,   -44,    54,    34,   -44,    21,     2,    51,
-      52,     2,   -44,    53,   -44
+      11,    12,    24,    32,   -40,   -40,    -3,     0,   -40,    29,
+       0,   -20,    38,   -40,   -40,     0,    41,   -40,    -6,   -40,
+       0,    30,    15,    30,    10,    50,    -6,    -6,    -6,   -40,
+     -40,   -40,   -40,   -40,    30,   -40,    48,    34,    47,    46,
+      30,    18,   -40,   -40,   -40,   -40,   -40,    35,    -6,    30,
+      -5,    -6,   -40,   -40,    36,    37,   -40,   -40,    -4,   -40,
+      51,    49,   -40,    18,    -6,   -40,    -5,   -40,   -40,    55,
+      39,   -40,    -5,    -6,    53,    54,    -6,   -40,    56,   -40
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -632,28 +635,27 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        5,     4,     0,    10,     3,     1,     9,    14,     8,     7,
-      14,     0,     0,     6,    11,    14,     0,    15,    21,    13,
-      14,     0,     0,     0,     0,     0,    17,    21,    21,    21,
-      12,    36,    37,    38,    39,     0,    35,     0,    24,     0,
-       0,     0,     0,    16,     2,    18,    19,    20,     0,    21,
-       0,     0,    21,    23,    31,    32,    33,    34,    29,    30,
-       0,    28,    26,     0,    25,     0,     0,    22,     0,    21,
-      40,     0,    44,    27,     0,     0,    41,     0,    21,     0,
-       0,    21,    42,     0,    43
+      14,     0,     0,     6,    11,    14,     0,    15,    20,    13,
+      14,     0,     0,     0,     0,     0,    20,    20,    20,    12,
+      36,    37,    38,    39,     0,    35,     0,    32,     0,     0,
+       0,     0,    16,     2,    17,    18,    19,     0,    20,     0,
+       0,    20,    22,    31,     0,    29,    30,    34,     0,    33,
+       0,     0,    21,     0,    20,    23,     0,    27,    28,     0,
+       0,    24,     0,    20,     0,     0,    20,    25,     0,    26
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -44,   -44,   -44,   -44,     4,   -44,   -44,   -44,   -27,   -44,
-     -20,     1,   -44,   -43,   -44,   -44
+     -40,   -40,   -40,   -40,    16,   -40,   -40,   -26,   -40,   -40,
+     -40,    14,   -40,   -17,   -39
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,     7,    12,    18,    44,    25,    26,    27,
-      37,    60,    61,    38,    28,    29
+      -1,     2,     3,     7,    12,    18,    43,    25,    26,    27,
+      28,    54,    55,    56,    37
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -661,26 +663,26 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      45,    46,    47,    40,     8,    69,    10,    70,    65,    31,
-      32,    33,    34,    21,    14,    48,    35,    22,     1,    19,
-      36,    53,    63,    23,    30,    66,    15,    16,    75,     4,
-      64,     9,     5,    11,    79,     6,    24,    54,    55,    56,
-      57,    58,    74,    13,    31,    32,    33,    34,    59,    41,
-      42,    80,    77,    78,    83,    36,    17,    20,    39,    43,
-      51,    50,    49,    71,    52,    72,    62,    67,    76,    73,
-      81,    68,    82,    84
+      44,    45,    46,     8,    36,    21,    39,    10,    64,    22,
+      65,    60,    15,    16,     1,    23,     4,    47,    30,    31,
+      32,    33,    58,    52,     5,    61,    14,    70,    24,    35,
+       9,    19,    59,    74,    11,    13,    29,     6,    69,    40,
+      41,    30,    31,    32,    33,    53,    17,    75,    34,    38,
+      78,    20,    35,    30,    31,    32,    33,    72,    73,    42,
+      34,    48,    49,    50,    35,    51,    57,    62,    66,    71,
+      63,    67,    76,     0,    77,     0,    79,    68
 };
 
 static const yytype_int8 yycheck[] =
 {
-      27,    28,    29,    23,     6,    12,     7,    14,    51,    23,
-      24,    25,    26,    11,    10,    35,    30,    15,     3,    15,
-      34,    41,    49,    21,    20,    52,    32,    33,    71,     4,
-      50,    33,     0,    34,    77,     5,    34,    23,    24,    25,
-      26,    27,    69,     6,    23,    24,    25,    26,    34,    29,
-      30,    78,    18,    19,    81,    34,     8,    10,    34,     9,
-      16,    28,    13,    17,    19,    22,    31,    31,    14,    68,
-      19,    33,    20,    20
+      26,    27,    28,     6,    21,    11,    23,     7,    12,    15,
+      14,    50,    32,    33,     3,    21,     4,    34,    23,    24,
+      25,    26,    48,    40,     0,    51,    10,    66,    34,    34,
+      33,    15,    49,    72,    34,     6,    20,     5,    64,    29,
+      30,    23,    24,    25,    26,    27,     8,    73,    30,    34,
+      76,    10,    34,    23,    24,    25,    26,    18,    19,     9,
+      30,    13,    28,    16,    34,    19,    31,    31,    17,    14,
+      33,    22,    19,    -1,    20,    -1,    20,    63
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -689,33 +691,30 @@ static const yytype_int8 yystos[] =
 {
        0,     3,    36,    37,     4,     0,     5,    38,     6,    33,
        7,    34,    39,     6,    39,    32,    33,     8,    40,    39,
-      10,    11,    15,    21,    34,    42,    43,    44,    49,    50,
-      39,    23,    24,    25,    26,    30,    34,    45,    48,    34,
-      45,    29,    30,     9,    41,    43,    43,    43,    45,    13,
-      28,    16,    19,    45,    23,    24,    25,    26,    27,    34,
-      46,    47,    31,    43,    45,    48,    43,    31,    33,    12,
-      14,    17,    22,    46,    43,    48,    14,    18,    19,    48,
-      43,    19,    20,    43,    20
+      10,    11,    15,    21,    34,    42,    43,    44,    45,    39,
+      23,    24,    25,    26,    30,    34,    48,    49,    34,    48,
+      29,    30,     9,    41,    42,    42,    42,    48,    13,    28,
+      16,    19,    48,    27,    46,    47,    48,    31,    42,    48,
+      49,    42,    31,    33,    12,    14,    17,    22,    46,    42,
+      49,    14,    18,    19,    49,    42,    19,    20,    42,    20
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
        0,    35,    36,    37,    37,    37,    38,    38,    38,    38,
-      38,    39,    39,    39,    39,    40,    41,    42,    43,    43,
-      43,    43,    44,    44,    45,    45,    45,    46,    46,    47,
-      47,    47,    47,    47,    47,    48,    48,    48,    48,    48,
-      49,    49,    50,    50,    50
+      38,    39,    39,    39,    39,    40,    41,    42,    42,    42,
+      42,    43,    43,    44,    44,    45,    45,    45,    46,    46,
+      47,    47,    48,    48,    48,    49,    49,    49,    49,    49
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     6,     2,     1,     0,     3,     2,     2,     1,
-       0,     2,     4,     3,     0,     1,     1,     1,     2,     2,
-       2,     0,     4,     3,     1,     3,     3,     3,     1,     1,
-       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
-       5,     7,     9,    11,     5
+       0,     2,     4,     3,     0,     1,     1,     2,     2,     2,
+       0,     4,     3,     5,     7,     9,    11,     5,     3,     1,
+       1,     1,     1,     3,     3,     1,     1,     1,     1,     1
 };
 
 
@@ -1411,72 +1410,78 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 110 "./bison/parser.y"
-                                                                            {
+#line 115 "./bison/parser.y"
+                                                                                   {
 				printf(" <algorithme> \t -> \t Algorithme : OK\n");
+				(yyval.noeud) = g_node_new((gpointer)ALGORITHME);
+				g_node_append((yyval.noeud), (yyvsp[-3].noeud)); //Partie declaration
+				g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //Partie programme
+				//generation du code
+				g_node_destroy((yyval.noeud));
 			}
-#line 1419 "parser.tab.c"
+#line 1423 "parser.tab.c"
     break;
 
   case 3:
-#line 115 "./bison/parser.y"
+#line 125 "./bison/parser.y"
                                         {  }
-#line 1425 "parser.tab.c"
+#line 1429 "parser.tab.c"
     break;
 
   case 4:
-#line 116 "./bison/parser.y"
+#line 126 "./bison/parser.y"
                                         {  }
-#line 1431 "parser.tab.c"
+#line 1435 "parser.tab.c"
     break;
 
   case 5:
-#line 117 "./bison/parser.y"
+#line 127 "./bison/parser.y"
                                         {  }
-#line 1437 "parser.tab.c"
+#line 1441 "parser.tab.c"
     break;
 
   case 6:
-#line 120 "./bison/parser.y"
+#line 130 "./bison/parser.y"
                                             {  }
-#line 1443 "parser.tab.c"
+#line 1447 "parser.tab.c"
     break;
 
   case 7:
-#line 121 "./bison/parser.y"
+#line 131 "./bison/parser.y"
                                             {  }
-#line 1449 "parser.tab.c"
+#line 1453 "parser.tab.c"
     break;
 
   case 8:
-#line 122 "./bison/parser.y"
+#line 132 "./bison/parser.y"
                                                     {  }
-#line 1455 "parser.tab.c"
+#line 1459 "parser.tab.c"
     break;
 
   case 9:
-#line 123 "./bison/parser.y"
+#line 133 "./bison/parser.y"
                                             {  }
-#line 1461 "parser.tab.c"
+#line 1465 "parser.tab.c"
     break;
 
   case 10:
-#line 124 "./bison/parser.y"
+#line 134 "./bison/parser.y"
                                             {  }
-#line 1467 "parser.tab.c"
+#line 1471 "parser.tab.c"
     break;
 
   case 11:
-#line 127 "./bison/parser.y"
+#line 137 "./bison/parser.y"
                                       {
 				printf("Fin declaration\n");
 				//printf("%s\n", $2);
+				(yyval.noeud) = (yyvsp[0].noeud); //Passage de la partie declaration
 		   	}
-#line 1476 "parser.tab.c"
+#line 1481 "parser.tab.c"
     break;
 
   case 12:
-#line 131 "./bison/parser.y"
+#line 142 "./bison/parser.y"
                                                                 {
 				var = malloc(sizeof(Variable));
 				if(var == NULL) {
@@ -1493,12 +1498,17 @@ yyreduce:
 				else {
 					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", (yyvsp[-3].chaine));
 				}
+
+				(yyval.noeud) = g_node_new((gpointer)DECLARATION);
+				g_node_append_data((yyval.noeud), (yyvsp[-3].chaine)); //Identifiant de la variable
+				g_node_append_data((yyval.noeud), (yyvsp[-1].chaine)); //Type de la variable
+				g_node_append((yyval.noeud), (yyvsp[0].noeud)); //Suite des declaration
 		   	}
-#line 1498 "parser.tab.c"
+#line 1508 "parser.tab.c"
     break;
 
   case 13:
-#line 148 "./bison/parser.y"
+#line 164 "./bison/parser.y"
                                                {
 				var = malloc(sizeof(Variable));
 				if(var == NULL) {
@@ -1514,198 +1524,262 @@ yyreduce:
 				else {
 					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", (yyvsp[-2].chaine));
 				}
+				(yyval.noeud) = g_node_new((gpointer)DECLARATION);
+				g_node_append_data((yyval.noeud), (yyvsp[-2].chaine)); //Identifiant de la variable
+				g_node_append_data((yyval.noeud), type); //Type de la variable
+				g_node_append((yyval.noeud), (yyvsp[0].noeud)); //Suite des declaration
 		   	}
-#line 1519 "parser.tab.c"
+#line 1533 "parser.tab.c"
     break;
 
   case 14:
-#line 164 "./bison/parser.y"
-                         { printf("Debut declaration\n"); }
-#line 1525 "parser.tab.c"
+#line 184 "./bison/parser.y"
+                         {
+				   printf("Debut declaration\n");
+				   (yyval.noeud) = g_node_new((gpointer)VIDE);
+			}
+#line 1542 "parser.tab.c"
     break;
 
   case 15:
-#line 167 "./bison/parser.y"
-                 { printf("Debut du programme\n"); }
-#line 1531 "parser.tab.c"
+#line 190 "./bison/parser.y"
+                    { printf("Debut du programme\n"); }
+#line 1548 "parser.tab.c"
     break;
 
   case 16:
-#line 170 "./bison/parser.y"
-             { printf("Fin du programme\n"); }
-#line 1537 "parser.tab.c"
+#line 193 "./bison/parser.y"
+                  { printf("Fin du programme\n"); }
+#line 1554 "parser.tab.c"
     break;
 
   case 17:
-#line 173 "./bison/parser.y"
-                            {  }
-#line 1543 "parser.tab.c"
+#line 196 "./bison/parser.y"
+                                               {
+					(yyval.noeud) = g_node_new((gpointer)BLOC);
+					g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //L'instruction
+					g_node_append((yyval.noeud), (yyvsp[0].noeud)); //La suite des instructions
+				}
+#line 1564 "parser.tab.c"
     break;
 
   case 18:
-#line 176 "./bison/parser.y"
-                                               {  }
-#line 1549 "parser.tab.c"
+#line 201 "./bison/parser.y"
+                                                                            {
+					(yyval.noeud) = g_node_new((gpointer)BLOC);
+					g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //La structure conditionnelle
+					g_node_append((yyval.noeud), (yyvsp[0].noeud)); //La suite des instructions
+				}
+#line 1574 "parser.tab.c"
     break;
 
   case 19:
-#line 177 "./bison/parser.y"
-                                                                            {  }
-#line 1555 "parser.tab.c"
+#line 206 "./bison/parser.y"
+                                                                       {
+					(yyval.noeud) = g_node_new((gpointer)BLOC);
+					g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //La structure itérative
+					g_node_append((yyval.noeud), (yyvsp[0].noeud)); //La suite des instructions
+				}
+#line 1584 "parser.tab.c"
     break;
 
   case 20:
-#line 178 "./bison/parser.y"
-                                                                       {  }
-#line 1561 "parser.tab.c"
+#line 211 "./bison/parser.y"
+                                         {
+					(yyval.noeud) = g_node_new((gpointer)VIDE);
+				}
+#line 1592 "parser.tab.c"
     break;
 
   case 21:
-#line 179 "./bison/parser.y"
-                                         {  }
-#line 1567 "parser.tab.c"
-    break;
+#line 216 "./bison/parser.y"
+                                                     {
+				(yyval.noeud) = g_node_new((gpointer)INSTRUCTION);
+				g_node_append_data((yyval.noeud), (yyvsp[-3].chaine)); //Identifiant de l'instruction
+				g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //Suite des declaration
 
-  case 22:
-#line 182 "./bison/parser.y"
-                                                {  }
-#line 1573 "parser.tab.c"
-    break;
-
-  case 23:
-#line 183 "./bison/parser.y"
-                                                 {  }
-#line 1579 "parser.tab.c"
-    break;
-
-  case 24:
-#line 186 "./bison/parser.y"
-                     {  }
-#line 1585 "parser.tab.c"
-    break;
-
-  case 25:
-#line 187 "./bison/parser.y"
-                                               {  }
-#line 1591 "parser.tab.c"
-    break;
-
-  case 26:
-#line 188 "./bison/parser.y"
-                                                 {  }
-#line 1597 "parser.tab.c"
-    break;
-
-  case 27:
-#line 191 "./bison/parser.y"
-                                        {  }
+			}
 #line 1603 "parser.tab.c"
     break;
 
-  case 28:
-#line 192 "./bison/parser.y"
-                            {  }
-#line 1609 "parser.tab.c"
+  case 22:
+#line 222 "./bison/parser.y"
+                                                      {
+				(yyval.noeud) = g_node_new((gpointer)AFFECTATION);
+				g_node_append_data((yyval.noeud), (yyvsp[-2].chaine)); //Identifiant de la variable cible de l'affectation
+				g_node_append((yyval.noeud), (yyvsp[0].noeud)); //Expression de l'affectation
+			}
+#line 1613 "parser.tab.c"
     break;
 
-  case 29:
-#line 195 "./bison/parser.y"
-                     {  }
-#line 1615 "parser.tab.c"
+  case 23:
+#line 229 "./bison/parser.y"
+                                                                              {
+							(yyval.noeud) = g_node_new((gpointer)IF);
+							g_node_append((yyval.noeud), (yyvsp[-3].noeud));
+							g_node_append((yyval.noeud), (yyvsp[-1].noeud));
+						}
+#line 1623 "parser.tab.c"
     break;
 
-  case 30:
-#line 196 "./bison/parser.y"
-                         {  }
-#line 1621 "parser.tab.c"
+  case 24:
+#line 234 "./bison/parser.y"
+                                                                                                                                {
+							(yyval.noeud) = g_node_new((gpointer)IF_ELSE);
+							g_node_append((yyval.noeud), (yyvsp[-5].noeud));
+							g_node_append((yyval.noeud), (yyvsp[-3].noeud));
+							g_node_append((yyval.noeud), (yyvsp[-1].noeud));
+						}
+#line 1634 "parser.tab.c"
     break;
 
-  case 31:
-#line 197 "./bison/parser.y"
-                          {  }
-#line 1627 "parser.tab.c"
+  case 25:
+#line 242 "./bison/parser.y"
+                                                                                                            {
+						(yyval.noeud) = g_node_new((gpointer)FOR);
+						g_node_append_data((yyval.noeud), (yyvsp[-7].chaine));
+						g_node_append_data((yyval.noeud), (yyvsp[-5].noeud));
+						g_node_append_data((yyval.noeud), (yyvsp[-3].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-1].noeud));
+					}
+#line 1646 "parser.tab.c"
     break;
 
-  case 32:
-#line 198 "./bison/parser.y"
-                            {  }
-#line 1633 "parser.tab.c"
+  case 26:
+#line 249 "./bison/parser.y"
+                                                                                                                                                 {
+						(yyval.noeud) = g_node_new((gpointer)FOR_BY_STEP);
+						g_node_append_data((yyval.noeud), (yyvsp[-9].chaine));
+						g_node_append_data((yyval.noeud), (yyvsp[-7].noeud));
+						g_node_append_data((yyval.noeud), (yyvsp[-5].noeud));
+						g_node_append_data((yyval.noeud), (yyvsp[-3].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-1].noeud));
+					}
+#line 1659 "parser.tab.c"
     break;
 
-  case 33:
-#line 199 "./bison/parser.y"
-                           {  }
-#line 1639 "parser.tab.c"
-    break;
-
-  case 34:
-#line 200 "./bison/parser.y"
-                           {  }
-#line 1645 "parser.tab.c"
-    break;
-
-  case 35:
-#line 203 "./bison/parser.y"
-                 {  }
-#line 1651 "parser.tab.c"
-    break;
-
-  case 36:
-#line 204 "./bison/parser.y"
-                          {  }
-#line 1657 "parser.tab.c"
-    break;
-
-  case 37:
-#line 205 "./bison/parser.y"
-                            {  }
-#line 1663 "parser.tab.c"
-    break;
-
-  case 38:
-#line 206 "./bison/parser.y"
-                           {  }
+  case 27:
+#line 257 "./bison/parser.y"
+                                                                                                  {
+						(yyval.noeud) = g_node_new((gpointer)WHILE);
+						g_node_append((yyval.noeud), (yyvsp[-3].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-1].noeud));
+					}
 #line 1669 "parser.tab.c"
     break;
 
-  case 39:
-#line 207 "./bison/parser.y"
-                           {  }
-#line 1675 "parser.tab.c"
+  case 28:
+#line 264 "./bison/parser.y"
+                                               {
+				(yyval.noeud) = g_node_new((gpointer)ARGUMENTS);
+				g_node_append((yyval.noeud), (yyvsp[-2].noeud));
+				g_node_append((yyval.noeud), (yyvsp[0].noeud));
+			}
+#line 1679 "parser.tab.c"
     break;
 
-  case 40:
-#line 210 "./bison/parser.y"
-                                                                              {  }
-#line 1681 "parser.tab.c"
-    break;
-
-  case 41:
-#line 211 "./bison/parser.y"
-                                                                                                                                {  }
+  case 29:
+#line 269 "./bison/parser.y"
+                                   {
+				(yyval.noeud) = (yyvsp[0].noeud);
+			}
 #line 1687 "parser.tab.c"
     break;
 
-  case 42:
-#line 214 "./bison/parser.y"
-                                                                                                       {  }
-#line 1693 "parser.tab.c"
+  case 30:
+#line 274 "./bison/parser.y"
+                     {
+			(yyval.noeud) = g_node_new((gpointer)ARGUMENT);
+			g_node_append((yyval.noeud), (yyvsp[0].noeud));
+		}
+#line 1696 "parser.tab.c"
     break;
 
-  case 43:
-#line 215 "./bison/parser.y"
-                                                                                                                                            {  }
-#line 1699 "parser.tab.c"
-    break;
-
-  case 44:
-#line 216 "./bison/parser.y"
-                                                                                             {  }
+  case 31:
+#line 278 "./bison/parser.y"
+                             {
+			(yyval.noeud) = g_node_new((gpointer)ARG_STRING);
+			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
+		}
 #line 1705 "parser.tab.c"
     break;
 
+  case 32:
+#line 284 "./bison/parser.y"
+                           {
+				(yyval.noeud) = g_node_new((gpointer)OPERANDE);
+				g_node_append((yyval.noeud), (yyvsp[0].noeud));
+			}
+#line 1714 "parser.tab.c"
+    break;
 
-#line 1709 "parser.tab.c"
+  case 33:
+#line 288 "./bison/parser.y"
+                                                     {
+				(yyval.noeud) = g_node_new((gpointer)EXPRESSION);
+				g_node_append((yyval.noeud), (yyvsp[-2].noeud));
+				g_node_append_data((yyval.noeud), (yyvsp[-1].chaine));
+				g_node_append((yyval.noeud), (yyvsp[0].noeud));
+			}
+#line 1725 "parser.tab.c"
+    break;
+
+  case 34:
+#line 294 "./bison/parser.y"
+                                                       {
+				(yyval.noeud) = g_node_new((gpointer)EXPRESSION_PAR);
+				g_node_append((yyval.noeud), (yyvsp[-1].noeud));
+			}
+#line 1734 "parser.tab.c"
+    break;
+
+  case 35:
+#line 300 "./bison/parser.y"
+                 {
+			(yyval.noeud) = g_node_new((gpointer)ID);
+			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
+		}
+#line 1743 "parser.tab.c"
+    break;
+
+  case 36:
+#line 304 "./bison/parser.y"
+                          {
+			(yyval.noeud) = g_node_new((gpointer)ENTIER);
+			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
+		}
+#line 1752 "parser.tab.c"
+    break;
+
+  case 37:
+#line 308 "./bison/parser.y"
+                            {
+			(yyval.noeud) = g_node_new((gpointer)REEL);
+			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
+		}
+#line 1761 "parser.tab.c"
+    break;
+
+  case 38:
+#line 312 "./bison/parser.y"
+                           {
+			(yyval.noeud) = g_node_new((gpointer)CARACTERE);
+			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
+		}
+#line 1770 "parser.tab.c"
+    break;
+
+  case 39:
+#line 316 "./bison/parser.y"
+                           {
+			(yyval.noeud) = g_node_new((gpointer)BOOLEEN);
+			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
+		}
+#line 1779 "parser.tab.c"
+    break;
+
+
+#line 1783 "parser.tab.c"
 
       default: break;
     }
@@ -1937,7 +2011,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 219 "./bison/parser.y"
+#line 322 "./bison/parser.y"
 
 
 int main (int argc, char* argv[]) {

@@ -1198,7 +1198,7 @@ case 37:
 YY_RULE_SETUP
 #line 229 "flex/lexer.l"
 {
-	yylval.nombre = atoi(yytext);
+	yylval.chaine =  strdup(yytext);
 	return(TOK_INT);
 }
 	YY_BREAK

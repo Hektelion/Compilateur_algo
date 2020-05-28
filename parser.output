@@ -2,7 +2,7 @@ Grammar
 
     0 $accept: algorithme $end
 
-    1 algorithme: algo_definition algo_role declaration debut programme fin
+    1 algorithme: algo_definition algo_role declaration debut bloc_instruction fin
 
     2 algo_definition: TOK_ALGO TOK_ALGO_NAME
     3                | TOK_ALGO
@@ -23,42 +23,36 @@ Grammar
 
    15 fin: TOK_END
 
-   16 programme: bloc_instruction
+   16 bloc_instruction: instruction bloc_instruction
+   17                 | structure_conditionnelle bloc_instruction
+   18                 | structure_iterative bloc_instruction
+   19                 | %empty
 
-   17 bloc_instruction: instruction bloc_instruction
-   18                 | structure_conditionnelle bloc_instruction
-   19                 | structure_iterative bloc_instruction
-   20                 | %empty
+   20 instruction: TOK_ID TOK_PARL arguments TOK_PARR
+   21            | TOK_ID TOK_EQUAL expression
 
-   21 instruction: TOK_ID TOK_PARL arguments TOK_PARR
-   22            | TOK_ID TOK_EQUAL expression
+   22 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF
+   23                         | TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
 
-   23 expression: operande
-   24           | operande TOK_OP expression
-   25           | TOK_PARL expression TOK_PARR
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+   26                    | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE
 
-   26 arguments: argument TOK_COMMA arguments
-   27          | argument
+   27 arguments: argument TOK_COMMA arguments
+   28          | argument
 
-   28 argument: TOK_STRING
-   29         | TOK_ID
-   30         | TOK_INT
-   31         | TOK_FLOAT
-   32         | TOK_CHAR
-   33         | TOK_BOOL
+   29 argument: expression
+   30         | TOK_STRING
+
+   31 expression: operande
+   32           | operande TOK_OP expression
+   33           | TOK_PARL expression TOK_PARR
 
    34 operande: TOK_ID
    35         | TOK_INT
    36         | TOK_FLOAT
    37         | TOK_CHAR
    38         | TOK_BOOL
-
-   39 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF
-   40                         | TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
-
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
-   43                    | TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE
 
 
 Terminals, with rules where they appear
@@ -73,46 +67,46 @@ Terminals, with rules where they appear
     TOK_BEGIN <chaine> (263) 14
     TOK_END <chaine> (264) 15
     TOK_TYPE <chaine> (265) 11
-    TOK_IF <chaine> (266) 39 40
-    TOK_ELSE <chaine> (267) 40
-    TOK_THEN <chaine> (268) 39 40
-    TOK_EIF <chaine> (269) 39 40
-    TOK_FOR <chaine> (270) 41 42
-    TOK_FROM <chaine> (271) 41 42
-    TOK_TO <chaine> (272) 41 42
-    TOK_BY_STEP <chaine> (273) 42
-    TOK_DO <chaine> (274) 41 42 43
-    TOK_EFOR <chaine> (275) 41 42
-    TOK_WHILE <chaine> (276) 43
-    TOK_EWHILE <chaine> (277) 43
-    TOK_INT <nombre> (278) 30 35
-    TOK_FLOAT <chaine> (279) 31 36
-    TOK_CHAR <chaine> (280) 32 37
-    TOK_BOOL <chaine> (281) 33 38
-    TOK_STRING <chaine> (282) 28
-    TOK_OP <chaine> (283) 24
-    TOK_EQUAL <chaine> (284) 22
-    TOK_PARL <chaine> (285) 21 25
-    TOK_PARR <chaine> (286) 21 25
+    TOK_IF <chaine> (266) 22 23
+    TOK_ELSE <chaine> (267) 23
+    TOK_THEN <chaine> (268) 22 23
+    TOK_EIF <chaine> (269) 22 23
+    TOK_FOR <chaine> (270) 24 25
+    TOK_FROM <chaine> (271) 24 25
+    TOK_TO <chaine> (272) 24 25
+    TOK_BY_STEP <chaine> (273) 25
+    TOK_DO <chaine> (274) 24 25 26
+    TOK_EFOR <chaine> (275) 24 25
+    TOK_WHILE <chaine> (276) 26
+    TOK_EWHILE <chaine> (277) 26
+    TOK_INT <chaine> (278) 35
+    TOK_FLOAT <chaine> (279) 36
+    TOK_CHAR <chaine> (280) 37
+    TOK_BOOL <chaine> (281) 38
+    TOK_STRING <chaine> (282) 30
+    TOK_OP <chaine> (283) 32
+    TOK_EQUAL <chaine> (284) 21
+    TOK_PARL <chaine> (285) 20 33
+    TOK_PARR <chaine> (286) 20 33
     TOK_COLON <chaine> (287) 12
-    TOK_COMMA <chaine> (288) 5 6 11 26
-    TOK_ID <chaine> (289) 11 12 21 22 29 34 41 42
+    TOK_COMMA <chaine> (288) 5 6 11 27
+    TOK_ID <chaine> (289) 11 12 20 21 24 25 34
 
 
 Nonterminals, with rules where they appear
 
     $accept (35)
         on left: 0
-    algorithme <chaine> (36)
+    algorithme <noeud> (36)
         on left: 1
         on right: 0
-    algo_definition <chaine> (37)
+    algo_definition <noeud> (37)
         on left: 2 3 4
         on right: 1
-    algo_role <chaine> (38)
+    algo_role <noeud> (38)
         on left: 5 6 7 8 9
         on right: 1
-    declaration <chaine> (39)
+    declaration <noeud> (39)
         on left: 10 11 12 13
         on right: 1 10 11 12
     debut (40)
@@ -121,33 +115,30 @@ Nonterminals, with rules where they appear
     fin (41)
         on left: 15
         on right: 1
-    programme (42)
-        on left: 16
-        on right: 1
-    bloc_instruction <chaine> (43)
-        on left: 17 18 19 20
-        on right: 16 17 18 19 39 40 41 42 43
-    instruction <chaine> (44)
-        on left: 21 22
+    bloc_instruction <noeud> (42)
+        on left: 16 17 18 19
+        on right: 1 16 17 18 22 23 24 25 26
+    instruction <noeud> (43)
+        on left: 20 21
+        on right: 16
+    structure_conditionnelle <noeud> (44)
+        on left: 22 23
         on right: 17
-    expression <chaine> (45)
-        on left: 23 24 25
-        on right: 22 24 25 39 40 43
-    arguments <chaine> (46)
-        on left: 26 27
-        on right: 21 26
-    argument <chaine> (47)
-        on left: 28 29 30 31 32 33
-        on right: 26 27
-    operande <chaine> (48)
-        on left: 34 35 36 37 38
-        on right: 23 24 41 42
-    structure_conditionnelle <chaine> (49)
-        on left: 39 40
+    structure_iterative <noeud> (45)
+        on left: 24 25 26
         on right: 18
-    structure_iterative <chaine> (50)
-        on left: 41 42 43
-        on right: 19
+    arguments <noeud> (46)
+        on left: 27 28
+        on right: 20 27
+    argument <noeud> (47)
+        on left: 29 30
+        on right: 27 28
+    expression <noeud> (48)
+        on left: 31 32 33
+        on right: 21 22 23 26 29 32 33
+    operande <noeud> (49)
+        on left: 34 35 36 37 38
+        on right: 24 25 31 32
 
 
 State 0
@@ -181,7 +172,7 @@ State 2
 
 State 3
 
-    1 algorithme: algo_definition . algo_role declaration debut programme fin
+    1 algorithme: algo_definition . algo_role declaration debut bloc_instruction fin
 
     TOK_ROLE  shift, and go to state 6
 
@@ -219,7 +210,7 @@ State 6
 
 State 7
 
-    1 algorithme: algo_definition algo_role . declaration debut programme fin
+    1 algorithme: algo_definition algo_role . declaration debut bloc_instruction fin
 
     TOK_DECLARE  shift, and go to state 10
     TOK_ID       shift, and go to state 11
@@ -269,7 +260,7 @@ State 11
 
 State 12
 
-    1 algorithme: algo_definition algo_role declaration . debut programme fin
+    1 algorithme: algo_definition algo_role declaration . debut bloc_instruction fin
 
     TOK_BEGIN  shift, and go to state 17
 
@@ -318,20 +309,19 @@ State 17
 
 State 18
 
-    1 algorithme: algo_definition algo_role declaration debut . programme fin
+    1 algorithme: algo_definition algo_role declaration debut . bloc_instruction fin
 
     TOK_IF     shift, and go to state 21
     TOK_FOR    shift, and go to state 22
     TOK_WHILE  shift, and go to state 23
     TOK_ID     shift, and go to state 24
 
-    $default  reduce using rule 20 (bloc_instruction)
+    $default  reduce using rule 19 (bloc_instruction)
 
-    programme                 go to state 25
-    bloc_instruction          go to state 26
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
+    bloc_instruction          go to state 25
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 19
@@ -350,628 +340,599 @@ State 20
 
     $default  reduce using rule 13 (declaration)
 
-    declaration  go to state 30
+    declaration  go to state 29
 
 
 State 21
 
-   39 structure_conditionnelle: TOK_IF . expression TOK_THEN bloc_instruction TOK_EIF
-   40                         | TOK_IF . expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+   22 structure_conditionnelle: TOK_IF . expression TOK_THEN bloc_instruction TOK_EIF
+   23                         | TOK_IF . expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_PARL   shift, and go to state 35
-    TOK_ID     shift, and go to state 36
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_PARL   shift, and go to state 34
+    TOK_ID     shift, and go to state 35
 
-    expression  go to state 37
-    operande    go to state 38
+    expression  go to state 36
+    operande    go to state 37
 
 
 State 22
 
-   41 structure_iterative: TOK_FOR . TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR . TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+   24 structure_iterative: TOK_FOR . TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR . TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
 
-    TOK_ID  shift, and go to state 39
+    TOK_ID  shift, and go to state 38
 
 
 State 23
 
-   43 structure_iterative: TOK_WHILE . expression TOK_DO bloc_instruction TOK_EWHILE
+   26 structure_iterative: TOK_WHILE . expression TOK_DO bloc_instruction TOK_EWHILE
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_PARL   shift, and go to state 35
-    TOK_ID     shift, and go to state 36
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_PARL   shift, and go to state 34
+    TOK_ID     shift, and go to state 35
 
-    expression  go to state 40
-    operande    go to state 38
+    expression  go to state 39
+    operande    go to state 37
 
 
 State 24
 
-   21 instruction: TOK_ID . TOK_PARL arguments TOK_PARR
-   22            | TOK_ID . TOK_EQUAL expression
+   20 instruction: TOK_ID . TOK_PARL arguments TOK_PARR
+   21            | TOK_ID . TOK_EQUAL expression
 
-    TOK_EQUAL  shift, and go to state 41
-    TOK_PARL   shift, and go to state 42
+    TOK_EQUAL  shift, and go to state 40
+    TOK_PARL   shift, and go to state 41
 
 
 State 25
 
-    1 algorithme: algo_definition algo_role declaration debut programme . fin
+    1 algorithme: algo_definition algo_role declaration debut bloc_instruction . fin
 
-    TOK_END  shift, and go to state 43
+    TOK_END  shift, and go to state 42
 
-    fin  go to state 44
+    fin  go to state 43
 
 
 State 26
 
-   16 programme: bloc_instruction .
+   16 bloc_instruction: instruction . bloc_instruction
 
-    $default  reduce using rule 16 (programme)
+    TOK_IF     shift, and go to state 21
+    TOK_FOR    shift, and go to state 22
+    TOK_WHILE  shift, and go to state 23
+    TOK_ID     shift, and go to state 24
+
+    $default  reduce using rule 19 (bloc_instruction)
+
+    bloc_instruction          go to state 44
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 27
 
-   17 bloc_instruction: instruction . bloc_instruction
+   17 bloc_instruction: structure_conditionnelle . bloc_instruction
 
     TOK_IF     shift, and go to state 21
     TOK_FOR    shift, and go to state 22
     TOK_WHILE  shift, and go to state 23
     TOK_ID     shift, and go to state 24
 
-    $default  reduce using rule 20 (bloc_instruction)
+    $default  reduce using rule 19 (bloc_instruction)
 
     bloc_instruction          go to state 45
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 28
 
-   18 bloc_instruction: structure_conditionnelle . bloc_instruction
+   18 bloc_instruction: structure_iterative . bloc_instruction
 
     TOK_IF     shift, and go to state 21
     TOK_FOR    shift, and go to state 22
     TOK_WHILE  shift, and go to state 23
     TOK_ID     shift, and go to state 24
 
-    $default  reduce using rule 20 (bloc_instruction)
+    $default  reduce using rule 19 (bloc_instruction)
 
     bloc_instruction          go to state 46
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 29
-
-   19 bloc_instruction: structure_iterative . bloc_instruction
-
-    TOK_IF     shift, and go to state 21
-    TOK_FOR    shift, and go to state 22
-    TOK_WHILE  shift, and go to state 23
-    TOK_ID     shift, and go to state 24
-
-    $default  reduce using rule 20 (bloc_instruction)
-
-    bloc_instruction          go to state 47
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
-
-
-State 30
 
    11 declaration: TOK_ID TOK_COMMA TOK_TYPE declaration .
 
     $default  reduce using rule 11 (declaration)
 
 
-State 31
+State 30
 
    35 operande: TOK_INT .
 
     $default  reduce using rule 35 (operande)
 
 
-State 32
+State 31
 
    36 operande: TOK_FLOAT .
 
     $default  reduce using rule 36 (operande)
 
 
-State 33
+State 32
 
    37 operande: TOK_CHAR .
 
     $default  reduce using rule 37 (operande)
 
 
-State 34
+State 33
 
    38 operande: TOK_BOOL .
 
     $default  reduce using rule 38 (operande)
 
 
+State 34
+
+   33 expression: TOK_PARL . expression TOK_PARR
+
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_PARL   shift, and go to state 34
+    TOK_ID     shift, and go to state 35
+
+    expression  go to state 47
+    operande    go to state 37
+
+
 State 35
-
-   25 expression: TOK_PARL . expression TOK_PARR
-
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_PARL   shift, and go to state 35
-    TOK_ID     shift, and go to state 36
-
-    expression  go to state 48
-    operande    go to state 38
-
-
-State 36
 
    34 operande: TOK_ID .
 
     $default  reduce using rule 34 (operande)
 
 
+State 36
+
+   22 structure_conditionnelle: TOK_IF expression . TOK_THEN bloc_instruction TOK_EIF
+   23                         | TOK_IF expression . TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+
+    TOK_THEN  shift, and go to state 48
+
+
 State 37
 
-   39 structure_conditionnelle: TOK_IF expression . TOK_THEN bloc_instruction TOK_EIF
-   40                         | TOK_IF expression . TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+   31 expression: operande .
+   32           | operande . TOK_OP expression
 
-    TOK_THEN  shift, and go to state 49
+    TOK_OP  shift, and go to state 49
+
+    $default  reduce using rule 31 (expression)
 
 
 State 38
 
-   23 expression: operande .
-   24           | operande . TOK_OP expression
+   24 structure_iterative: TOK_FOR TOK_ID . TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR TOK_ID . TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
 
-    TOK_OP  shift, and go to state 50
-
-    $default  reduce using rule 23 (expression)
+    TOK_FROM  shift, and go to state 50
 
 
 State 39
 
-   41 structure_iterative: TOK_FOR TOK_ID . TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR TOK_ID . TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+   26 structure_iterative: TOK_WHILE expression . TOK_DO bloc_instruction TOK_EWHILE
 
-    TOK_FROM  shift, and go to state 51
+    TOK_DO  shift, and go to state 51
 
 
 State 40
 
-   43 structure_iterative: TOK_WHILE expression . TOK_DO bloc_instruction TOK_EWHILE
+   21 instruction: TOK_ID TOK_EQUAL . expression
 
-    TOK_DO  shift, and go to state 52
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_PARL   shift, and go to state 34
+    TOK_ID     shift, and go to state 35
+
+    expression  go to state 52
+    operande    go to state 37
 
 
 State 41
 
-   22 instruction: TOK_ID TOK_EQUAL . expression
+   20 instruction: TOK_ID TOK_PARL . arguments TOK_PARR
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_PARL   shift, and go to state 35
-    TOK_ID     shift, and go to state 36
+    TOK_INT     shift, and go to state 30
+    TOK_FLOAT   shift, and go to state 31
+    TOK_CHAR    shift, and go to state 32
+    TOK_BOOL    shift, and go to state 33
+    TOK_STRING  shift, and go to state 53
+    TOK_PARL    shift, and go to state 34
+    TOK_ID      shift, and go to state 35
 
-    expression  go to state 53
-    operande    go to state 38
+    arguments   go to state 54
+    argument    go to state 55
+    expression  go to state 56
+    operande    go to state 37
 
 
 State 42
-
-   21 instruction: TOK_ID TOK_PARL . arguments TOK_PARR
-
-    TOK_INT     shift, and go to state 54
-    TOK_FLOAT   shift, and go to state 55
-    TOK_CHAR    shift, and go to state 56
-    TOK_BOOL    shift, and go to state 57
-    TOK_STRING  shift, and go to state 58
-    TOK_ID      shift, and go to state 59
-
-    arguments  go to state 60
-    argument   go to state 61
-
-
-State 43
 
    15 fin: TOK_END .
 
     $default  reduce using rule 15 (fin)
 
 
-State 44
+State 43
 
-    1 algorithme: algo_definition algo_role declaration debut programme fin .
+    1 algorithme: algo_definition algo_role declaration debut bloc_instruction fin .
 
     $default  reduce using rule 1 (algorithme)
 
 
+State 44
+
+   16 bloc_instruction: instruction bloc_instruction .
+
+    $default  reduce using rule 16 (bloc_instruction)
+
+
 State 45
 
-   17 bloc_instruction: instruction bloc_instruction .
+   17 bloc_instruction: structure_conditionnelle bloc_instruction .
 
     $default  reduce using rule 17 (bloc_instruction)
 
 
 State 46
 
-   18 bloc_instruction: structure_conditionnelle bloc_instruction .
+   18 bloc_instruction: structure_iterative bloc_instruction .
 
     $default  reduce using rule 18 (bloc_instruction)
 
 
 State 47
 
-   19 bloc_instruction: structure_iterative bloc_instruction .
+   33 expression: TOK_PARL expression . TOK_PARR
 
-    $default  reduce using rule 19 (bloc_instruction)
+    TOK_PARR  shift, and go to state 57
 
 
 State 48
 
-   25 expression: TOK_PARL expression . TOK_PARR
+   22 structure_conditionnelle: TOK_IF expression TOK_THEN . bloc_instruction TOK_EIF
+   23                         | TOK_IF expression TOK_THEN . bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
 
-    TOK_PARR  shift, and go to state 62
+    TOK_IF     shift, and go to state 21
+    TOK_FOR    shift, and go to state 22
+    TOK_WHILE  shift, and go to state 23
+    TOK_ID     shift, and go to state 24
+
+    $default  reduce using rule 19 (bloc_instruction)
+
+    bloc_instruction          go to state 58
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 49
 
-   39 structure_conditionnelle: TOK_IF expression TOK_THEN . bloc_instruction TOK_EIF
-   40                         | TOK_IF expression TOK_THEN . bloc_instruction TOK_ELSE bloc_instruction TOK_EIF
+   32 expression: operande TOK_OP . expression
 
-    TOK_IF     shift, and go to state 21
-    TOK_FOR    shift, and go to state 22
-    TOK_WHILE  shift, and go to state 23
-    TOK_ID     shift, and go to state 24
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_PARL   shift, and go to state 34
+    TOK_ID     shift, and go to state 35
 
-    $default  reduce using rule 20 (bloc_instruction)
-
-    bloc_instruction          go to state 63
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
+    expression  go to state 59
+    operande    go to state 37
 
 
 State 50
 
-   24 expression: operande TOK_OP . expression
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM . operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR TOK_ID TOK_FROM . operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_PARL   shift, and go to state 35
-    TOK_ID     shift, and go to state 36
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_ID     shift, and go to state 35
 
-    expression  go to state 64
-    operande    go to state 38
+    operande  go to state 60
 
 
 State 51
 
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM . operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR TOK_ID TOK_FROM . operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+   26 structure_iterative: TOK_WHILE expression TOK_DO . bloc_instruction TOK_EWHILE
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_ID     shift, and go to state 36
+    TOK_IF     shift, and go to state 21
+    TOK_FOR    shift, and go to state 22
+    TOK_WHILE  shift, and go to state 23
+    TOK_ID     shift, and go to state 24
 
-    operande  go to state 65
+    $default  reduce using rule 19 (bloc_instruction)
+
+    bloc_instruction          go to state 61
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 52
 
-   43 structure_iterative: TOK_WHILE expression TOK_DO . bloc_instruction TOK_EWHILE
-
-    TOK_IF     shift, and go to state 21
-    TOK_FOR    shift, and go to state 22
-    TOK_WHILE  shift, and go to state 23
-    TOK_ID     shift, and go to state 24
-
-    $default  reduce using rule 20 (bloc_instruction)
-
-    bloc_instruction          go to state 66
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
-
-
-State 53
-
-   22 instruction: TOK_ID TOK_EQUAL expression .
-
-    $default  reduce using rule 22 (instruction)
-
-
-State 54
-
-   30 argument: TOK_INT .
-
-    $default  reduce using rule 30 (argument)
-
-
-State 55
-
-   31 argument: TOK_FLOAT .
-
-    $default  reduce using rule 31 (argument)
-
-
-State 56
-
-   32 argument: TOK_CHAR .
-
-    $default  reduce using rule 32 (argument)
-
-
-State 57
-
-   33 argument: TOK_BOOL .
-
-    $default  reduce using rule 33 (argument)
-
-
-State 58
-
-   28 argument: TOK_STRING .
-
-    $default  reduce using rule 28 (argument)
-
-
-State 59
-
-   29 argument: TOK_ID .
-
-    $default  reduce using rule 29 (argument)
-
-
-State 60
-
-   21 instruction: TOK_ID TOK_PARL arguments . TOK_PARR
-
-    TOK_PARR  shift, and go to state 67
-
-
-State 61
-
-   26 arguments: argument . TOK_COMMA arguments
-   27          | argument .
-
-    TOK_COMMA  shift, and go to state 68
-
-    $default  reduce using rule 27 (arguments)
-
-
-State 62
-
-   25 expression: TOK_PARL expression TOK_PARR .
-
-    $default  reduce using rule 25 (expression)
-
-
-State 63
-
-   39 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction . TOK_EIF
-   40                         | TOK_IF expression TOK_THEN bloc_instruction . TOK_ELSE bloc_instruction TOK_EIF
-
-    TOK_ELSE  shift, and go to state 69
-    TOK_EIF   shift, and go to state 70
-
-
-State 64
-
-   24 expression: operande TOK_OP expression .
-
-    $default  reduce using rule 24 (expression)
-
-
-State 65
-
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande . TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR TOK_ID TOK_FROM operande . TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
-
-    TOK_TO  shift, and go to state 71
-
-
-State 66
-
-   43 structure_iterative: TOK_WHILE expression TOK_DO bloc_instruction . TOK_EWHILE
-
-    TOK_EWHILE  shift, and go to state 72
-
-
-State 67
-
-   21 instruction: TOK_ID TOK_PARL arguments TOK_PARR .
+   21 instruction: TOK_ID TOK_EQUAL expression .
 
     $default  reduce using rule 21 (instruction)
 
 
+State 53
+
+   30 argument: TOK_STRING .
+
+    $default  reduce using rule 30 (argument)
+
+
+State 54
+
+   20 instruction: TOK_ID TOK_PARL arguments . TOK_PARR
+
+    TOK_PARR  shift, and go to state 62
+
+
+State 55
+
+   27 arguments: argument . TOK_COMMA arguments
+   28          | argument .
+
+    TOK_COMMA  shift, and go to state 63
+
+    $default  reduce using rule 28 (arguments)
+
+
+State 56
+
+   29 argument: expression .
+
+    $default  reduce using rule 29 (argument)
+
+
+State 57
+
+   33 expression: TOK_PARL expression TOK_PARR .
+
+    $default  reduce using rule 33 (expression)
+
+
+State 58
+
+   22 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction . TOK_EIF
+   23                         | TOK_IF expression TOK_THEN bloc_instruction . TOK_ELSE bloc_instruction TOK_EIF
+
+    TOK_ELSE  shift, and go to state 64
+    TOK_EIF   shift, and go to state 65
+
+
+State 59
+
+   32 expression: operande TOK_OP expression .
+
+    $default  reduce using rule 32 (expression)
+
+
+State 60
+
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande . TOK_TO operande TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR TOK_ID TOK_FROM operande . TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_TO  shift, and go to state 66
+
+
+State 61
+
+   26 structure_iterative: TOK_WHILE expression TOK_DO bloc_instruction . TOK_EWHILE
+
+    TOK_EWHILE  shift, and go to state 67
+
+
+State 62
+
+   20 instruction: TOK_ID TOK_PARL arguments TOK_PARR .
+
+    $default  reduce using rule 20 (instruction)
+
+
+State 63
+
+   27 arguments: argument TOK_COMMA . arguments
+
+    TOK_INT     shift, and go to state 30
+    TOK_FLOAT   shift, and go to state 31
+    TOK_CHAR    shift, and go to state 32
+    TOK_BOOL    shift, and go to state 33
+    TOK_STRING  shift, and go to state 53
+    TOK_PARL    shift, and go to state 34
+    TOK_ID      shift, and go to state 35
+
+    arguments   go to state 68
+    argument    go to state 55
+    expression  go to state 56
+    operande    go to state 37
+
+
+State 64
+
+   23 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE . bloc_instruction TOK_EIF
+
+    TOK_IF     shift, and go to state 21
+    TOK_FOR    shift, and go to state 22
+    TOK_WHILE  shift, and go to state 23
+    TOK_ID     shift, and go to state 24
+
+    $default  reduce using rule 19 (bloc_instruction)
+
+    bloc_instruction          go to state 69
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
+
+
+State 65
+
+   22 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF .
+
+    $default  reduce using rule 22 (structure_conditionnelle)
+
+
+State 66
+
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO . operande TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR TOK_ID TOK_FROM operande TOK_TO . operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_ID     shift, and go to state 35
+
+    operande  go to state 70
+
+
+State 67
+
+   26 structure_iterative: TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE .
+
+    $default  reduce using rule 26 (structure_iterative)
+
+
 State 68
 
-   26 arguments: argument TOK_COMMA . arguments
+   27 arguments: argument TOK_COMMA arguments .
 
-    TOK_INT     shift, and go to state 54
-    TOK_FLOAT   shift, and go to state 55
-    TOK_CHAR    shift, and go to state 56
-    TOK_BOOL    shift, and go to state 57
-    TOK_STRING  shift, and go to state 58
-    TOK_ID      shift, and go to state 59
-
-    arguments  go to state 73
-    argument   go to state 61
+    $default  reduce using rule 27 (arguments)
 
 
 State 69
 
-   40 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE . bloc_instruction TOK_EIF
+   23 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction . TOK_EIF
 
-    TOK_IF     shift, and go to state 21
-    TOK_FOR    shift, and go to state 22
-    TOK_WHILE  shift, and go to state 23
-    TOK_ID     shift, and go to state 24
-
-    $default  reduce using rule 20 (bloc_instruction)
-
-    bloc_instruction          go to state 74
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
+    TOK_EIF  shift, and go to state 71
 
 
 State 70
 
-   39 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF .
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande . TOK_DO bloc_instruction TOK_EFOR
+   25                    | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande . TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
 
-    $default  reduce using rule 39 (structure_conditionnelle)
+    TOK_BY_STEP  shift, and go to state 72
+    TOK_DO       shift, and go to state 73
 
 
 State 71
 
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO . operande TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR TOK_ID TOK_FROM operande TOK_TO . operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+   23 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF .
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_ID     shift, and go to state 36
-
-    operande  go to state 75
+    $default  reduce using rule 23 (structure_conditionnelle)
 
 
 State 72
 
-   43 structure_iterative: TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE .
+   25 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP . operande TOK_DO bloc_instruction TOK_EFOR
 
-    $default  reduce using rule 43 (structure_iterative)
+    TOK_INT    shift, and go to state 30
+    TOK_FLOAT  shift, and go to state 31
+    TOK_CHAR   shift, and go to state 32
+    TOK_BOOL   shift, and go to state 33
+    TOK_ID     shift, and go to state 35
+
+    operande  go to state 74
 
 
 State 73
 
-   26 arguments: argument TOK_COMMA arguments .
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO . bloc_instruction TOK_EFOR
 
-    $default  reduce using rule 26 (arguments)
+    TOK_IF     shift, and go to state 21
+    TOK_FOR    shift, and go to state 22
+    TOK_WHILE  shift, and go to state 23
+    TOK_ID     shift, and go to state 24
+
+    $default  reduce using rule 19 (bloc_instruction)
+
+    bloc_instruction          go to state 75
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 74
 
-   40 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction . TOK_EIF
+   25 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande . TOK_DO bloc_instruction TOK_EFOR
 
-    TOK_EIF  shift, and go to state 76
+    TOK_DO  shift, and go to state 76
 
 
 State 75
 
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande . TOK_DO bloc_instruction TOK_EFOR
-   42                    | TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande . TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction . TOK_EFOR
 
-    TOK_BY_STEP  shift, and go to state 77
-    TOK_DO       shift, and go to state 78
+    TOK_EFOR  shift, and go to state 77
 
 
 State 76
 
-   40 structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_ELSE bloc_instruction TOK_EIF .
+   25 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO . bloc_instruction TOK_EFOR
 
-    $default  reduce using rule 40 (structure_conditionnelle)
+    TOK_IF     shift, and go to state 21
+    TOK_FOR    shift, and go to state 22
+    TOK_WHILE  shift, and go to state 23
+    TOK_ID     shift, and go to state 24
+
+    $default  reduce using rule 19 (bloc_instruction)
+
+    bloc_instruction          go to state 78
+    instruction               go to state 26
+    structure_conditionnelle  go to state 27
+    structure_iterative       go to state 28
 
 
 State 77
 
-   42 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP . operande TOK_DO bloc_instruction TOK_EFOR
+   24 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR .
 
-    TOK_INT    shift, and go to state 31
-    TOK_FLOAT  shift, and go to state 32
-    TOK_CHAR   shift, and go to state 33
-    TOK_BOOL   shift, and go to state 34
-    TOK_ID     shift, and go to state 36
-
-    operande  go to state 79
+    $default  reduce using rule 24 (structure_iterative)
 
 
 State 78
 
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO . bloc_instruction TOK_EFOR
+   25 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction . TOK_EFOR
 
-    TOK_IF     shift, and go to state 21
-    TOK_FOR    shift, and go to state 22
-    TOK_WHILE  shift, and go to state 23
-    TOK_ID     shift, and go to state 24
-
-    $default  reduce using rule 20 (bloc_instruction)
-
-    bloc_instruction          go to state 80
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
+    TOK_EFOR  shift, and go to state 79
 
 
 State 79
 
-   42 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande . TOK_DO bloc_instruction TOK_EFOR
+   25 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR .
 
-    TOK_DO  shift, and go to state 81
-
-
-State 80
-
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction . TOK_EFOR
-
-    TOK_EFOR  shift, and go to state 82
-
-
-State 81
-
-   42 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO . bloc_instruction TOK_EFOR
-
-    TOK_IF     shift, and go to state 21
-    TOK_FOR    shift, and go to state 22
-    TOK_WHILE  shift, and go to state 23
-    TOK_ID     shift, and go to state 24
-
-    $default  reduce using rule 20 (bloc_instruction)
-
-    bloc_instruction          go to state 83
-    instruction               go to state 27
-    structure_conditionnelle  go to state 28
-    structure_iterative       go to state 29
-
-
-State 82
-
-   41 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR .
-
-    $default  reduce using rule 41 (structure_iterative)
-
-
-State 83
-
-   42 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction . TOK_EFOR
-
-    TOK_EFOR  shift, and go to state 84
-
-
-State 84
-
-   42 structure_iterative: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR .
-
-    $default  reduce using rule 42 (structure_iterative)
+    $default  reduce using rule 25 (structure_iterative)
