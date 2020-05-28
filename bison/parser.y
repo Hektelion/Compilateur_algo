@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <include.h>
+#include <generator.h>
 
 typedef struct Variable {
 	char *type;
@@ -113,11 +114,11 @@ Variable *var;
 /* Regle */
 
 algorithme	: algo_definition algo_role declaration debut bloc_instruction fin {
-				printf(" <algorithme> \t -> \t Algorithme : OK\n");
+				//printf(" <algorithme> \t -> \t Algorithme : OK\n");
 				$$ = g_node_new((gpointer)ALGORITHME);
 				g_node_append($$, $3); //Partie declaration
 				g_node_append($$, $5); //Partie programme
-				//generation du code
+				gen_code($$);
 				g_node_destroy($$);
 			}
           	;
@@ -135,8 +136,7 @@ algo_role: TOK_ROLE TOK_COMMA TOK_ROLE_DESC {  }
          ;
 
 declaration : TOK_DECLARE declaration {
-				printf("Fin declaration\n");
-				//printf("%s\n", $2);
+				//printf("Fin declaration\n");
 				$$ = $2; //Passage de la partie declaration
 		   	}
 		   	| TOK_ID TOK_COMMA TOK_TYPE declaration {
@@ -150,7 +150,7 @@ declaration : TOK_DECLARE declaration {
 				var->type = type;
 
 				if(g_hash_table_insert(var_hash_table, strdup($1), var)) {
-					printf("\tdeclaration de %s réussi\n", $1);					
+					//printf("\tdeclaration de %s réussi\n", $1);					
 				}
 				else {
 					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", $1);
@@ -171,7 +171,7 @@ declaration : TOK_DECLARE declaration {
 				var->type = type;
 
 				if(g_hash_table_insert(var_hash_table, strdup($1), var)) {
-					printf("\tdeclaration de %s réussi\n", $1);		
+					//printf("\tdeclaration de %s réussi\n", $1);		
 				}
 				else {
 					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", $1);
@@ -182,15 +182,19 @@ declaration : TOK_DECLARE declaration {
 				g_node_append($$, $3); //Suite des declaration
 		   	}
            	| %empty {
-				   printf("Debut declaration\n");
+				   //printf("Debut declaration\n");
 				   $$ = g_node_new((gpointer)VIDE);
 			}
            	;
 
-debut	: TOK_BEGIN { printf("Debut du programme\n"); }
+debut	: TOK_BEGIN {
+			//printf("Debut du programme\n");
+		}
      	;
 
-fin	: TOK_END { printf("Fin du programme\n"); }
+fin	: TOK_END {
+		//printf("Fin du programme\n");
+	}
    	;
 
 bloc_instruction: instruction bloc_instruction {
@@ -242,16 +246,16 @@ structure_conditionnelle: TOK_IF expression TOK_THEN bloc_instruction TOK_EIF {
 structure_iterative	: TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_DO bloc_instruction TOK_EFOR {
 						$$ = g_node_new((gpointer)FOR);
 						g_node_append_data($$, $2);
-						g_node_append_data($$, $4);
-						g_node_append_data($$, $6);
+						g_node_append($$, $4);
+						g_node_append($$, $6);
 						g_node_append($$, $8);
 					}
 				   	| TOK_FOR TOK_ID TOK_FROM operande TOK_TO operande TOK_BY_STEP operande TOK_DO bloc_instruction TOK_EFOR {
 						$$ = g_node_new((gpointer)FOR_BY_STEP);
 						g_node_append_data($$, $2);
-						g_node_append_data($$, $4);
-						g_node_append_data($$, $6);
-						g_node_append_data($$, $8);
+						g_node_append($$, $4);
+						g_node_append($$, $6);
+						g_node_append($$, $8);
 						g_node_append($$, $10);
 					}
 				   	| TOK_WHILE expression TOK_DO bloc_instruction TOK_EWHILE {
@@ -325,7 +329,9 @@ int main (int argc, char* argv[]) {
 	
 	init();
 
+	begin_code();
     yyparse();
+	end_code();
 
 	cleanup();
 
@@ -333,10 +339,12 @@ int main (int argc, char* argv[]) {
 }
 
 void init() {
-	if( (var_hash_table = g_hash_table_new(g_str_hash, g_str_equal)) == NULL )
+	if( (var_hash_table = g_hash_table_new(g_str_hash, g_str_equal)) == NULL ) {
 		perror("g_hash_table_new");
-	else
-		printf("Table de hachage crée avec succes\n");
+	}
+	else {
+		//printf("Table de hachage crée avec succes\n");
+	}
 }
 
 void cleanup() {

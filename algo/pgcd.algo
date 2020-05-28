@@ -31,6 +31,6 @@ Algorithme pgcd
       c = a - b
     ftant
     p = b
-    afficher("PGCD", p, "n")
+    afficher("PGCD : ", p, "n")
   Fin
 

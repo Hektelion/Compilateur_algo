@@ -72,6 +72,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <include.h>
+#include <generator.h>
 
 typedef struct Variable {
 	char *type;
@@ -93,7 +94,7 @@ GHashTable* var_hash_table;
 Variable *var;
 
 
-#line 97 "parser.tab.c"
+#line 98 "parser.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -180,7 +181,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 30 "./bison/parser.y"
+#line 31 "./bison/parser.y"
 
 	int entier;
 	float reel;
@@ -190,7 +191,7 @@ union YYSTYPE
 
 	GNode *noeud;
 
-#line 194 "parser.tab.c"
+#line 195 "parser.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -568,10 +569,10 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   115,   115,   125,   126,   127,   130,   131,   132,   133,
-     134,   137,   142,   164,   184,   190,   193,   196,   201,   206,
-     211,   216,   222,   229,   234,   242,   249,   257,   264,   269,
-     274,   278,   284,   288,   294,   300,   304,   308,   312,   316
+       0,   116,   116,   126,   127,   128,   131,   132,   133,   134,
+     135,   138,   142,   164,   184,   190,   195,   200,   205,   210,
+     215,   220,   226,   233,   238,   246,   253,   261,   268,   273,
+     278,   282,   288,   292,   298,   304,   308,   312,   316,   320
 };
 #endif
 
@@ -1410,71 +1411,70 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 115 "./bison/parser.y"
+#line 116 "./bison/parser.y"
                                                                                    {
-				printf(" <algorithme> \t -> \t Algorithme : OK\n");
+				//printf(" <algorithme> \t -> \t Algorithme : OK\n");
 				(yyval.noeud) = g_node_new((gpointer)ALGORITHME);
 				g_node_append((yyval.noeud), (yyvsp[-3].noeud)); //Partie declaration
 				g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //Partie programme
-				//generation du code
+				gen_code((yyval.noeud));
 				g_node_destroy((yyval.noeud));
 			}
-#line 1423 "parser.tab.c"
+#line 1424 "parser.tab.c"
     break;
 
   case 3:
-#line 125 "./bison/parser.y"
+#line 126 "./bison/parser.y"
                                         {  }
-#line 1429 "parser.tab.c"
+#line 1430 "parser.tab.c"
     break;
 
   case 4:
-#line 126 "./bison/parser.y"
+#line 127 "./bison/parser.y"
                                         {  }
-#line 1435 "parser.tab.c"
+#line 1436 "parser.tab.c"
     break;
 
   case 5:
-#line 127 "./bison/parser.y"
+#line 128 "./bison/parser.y"
                                         {  }
-#line 1441 "parser.tab.c"
+#line 1442 "parser.tab.c"
     break;
 
   case 6:
-#line 130 "./bison/parser.y"
+#line 131 "./bison/parser.y"
                                             {  }
-#line 1447 "parser.tab.c"
+#line 1448 "parser.tab.c"
     break;
 
   case 7:
-#line 131 "./bison/parser.y"
+#line 132 "./bison/parser.y"
                                             {  }
-#line 1453 "parser.tab.c"
+#line 1454 "parser.tab.c"
     break;
 
   case 8:
-#line 132 "./bison/parser.y"
+#line 133 "./bison/parser.y"
                                                     {  }
-#line 1459 "parser.tab.c"
+#line 1460 "parser.tab.c"
     break;
 
   case 9:
-#line 133 "./bison/parser.y"
+#line 134 "./bison/parser.y"
                                             {  }
-#line 1465 "parser.tab.c"
+#line 1466 "parser.tab.c"
     break;
 
   case 10:
-#line 134 "./bison/parser.y"
+#line 135 "./bison/parser.y"
                                             {  }
-#line 1471 "parser.tab.c"
+#line 1472 "parser.tab.c"
     break;
 
   case 11:
-#line 137 "./bison/parser.y"
+#line 138 "./bison/parser.y"
                                       {
-				printf("Fin declaration\n");
-				//printf("%s\n", $2);
+				//printf("Fin declaration\n");
 				(yyval.noeud) = (yyvsp[0].noeud); //Passage de la partie declaration
 		   	}
 #line 1481 "parser.tab.c"
@@ -1493,7 +1493,7 @@ yyreduce:
 				var->type = type;
 
 				if(g_hash_table_insert(var_hash_table, strdup((yyvsp[-3].chaine)), var)) {
-					printf("\tdeclaration de %s réussi\n", (yyvsp[-3].chaine));					
+					//printf("\tdeclaration de %s réussi\n", $1);					
 				}
 				else {
 					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", (yyvsp[-3].chaine));
@@ -1519,7 +1519,7 @@ yyreduce:
 				var->type = type;
 
 				if(g_hash_table_insert(var_hash_table, strdup((yyvsp[-2].chaine)), var)) {
-					printf("\tdeclaration de %s réussi\n", (yyvsp[-2].chaine));		
+					//printf("\tdeclaration de %s réussi\n", $1);		
 				}
 				else {
 					fprintf(stderr, "ERREUR : la declaration de la varialbe %s a échouée\n", (yyvsp[-2].chaine));
@@ -1535,7 +1535,7 @@ yyreduce:
   case 14:
 #line 184 "./bison/parser.y"
                          {
-				   printf("Debut declaration\n");
+				   //printf("Debut declaration\n");
 				   (yyval.noeud) = g_node_new((gpointer)VIDE);
 			}
 #line 1542 "parser.tab.c"
@@ -1543,243 +1543,247 @@ yyreduce:
 
   case 15:
 #line 190 "./bison/parser.y"
-                    { printf("Debut du programme\n"); }
-#line 1548 "parser.tab.c"
+                    {
+			//printf("Debut du programme\n");
+		}
+#line 1550 "parser.tab.c"
     break;
 
   case 16:
-#line 193 "./bison/parser.y"
-                  { printf("Fin du programme\n"); }
-#line 1554 "parser.tab.c"
+#line 195 "./bison/parser.y"
+                  {
+		//printf("Fin du programme\n");
+	}
+#line 1558 "parser.tab.c"
     break;
 
   case 17:
-#line 196 "./bison/parser.y"
+#line 200 "./bison/parser.y"
                                                {
 					(yyval.noeud) = g_node_new((gpointer)BLOC);
 					g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //L'instruction
 					g_node_append((yyval.noeud), (yyvsp[0].noeud)); //La suite des instructions
 				}
-#line 1564 "parser.tab.c"
+#line 1568 "parser.tab.c"
     break;
 
   case 18:
-#line 201 "./bison/parser.y"
+#line 205 "./bison/parser.y"
                                                                             {
 					(yyval.noeud) = g_node_new((gpointer)BLOC);
 					g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //La structure conditionnelle
 					g_node_append((yyval.noeud), (yyvsp[0].noeud)); //La suite des instructions
 				}
-#line 1574 "parser.tab.c"
+#line 1578 "parser.tab.c"
     break;
 
   case 19:
-#line 206 "./bison/parser.y"
+#line 210 "./bison/parser.y"
                                                                        {
 					(yyval.noeud) = g_node_new((gpointer)BLOC);
 					g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //La structure itérative
 					g_node_append((yyval.noeud), (yyvsp[0].noeud)); //La suite des instructions
 				}
-#line 1584 "parser.tab.c"
+#line 1588 "parser.tab.c"
     break;
 
   case 20:
-#line 211 "./bison/parser.y"
+#line 215 "./bison/parser.y"
                                          {
 					(yyval.noeud) = g_node_new((gpointer)VIDE);
 				}
-#line 1592 "parser.tab.c"
+#line 1596 "parser.tab.c"
     break;
 
   case 21:
-#line 216 "./bison/parser.y"
+#line 220 "./bison/parser.y"
                                                      {
 				(yyval.noeud) = g_node_new((gpointer)INSTRUCTION);
 				g_node_append_data((yyval.noeud), (yyvsp[-3].chaine)); //Identifiant de l'instruction
 				g_node_append((yyval.noeud), (yyvsp[-1].noeud)); //Suite des declaration
 
 			}
-#line 1603 "parser.tab.c"
+#line 1607 "parser.tab.c"
     break;
 
   case 22:
-#line 222 "./bison/parser.y"
+#line 226 "./bison/parser.y"
                                                       {
 				(yyval.noeud) = g_node_new((gpointer)AFFECTATION);
 				g_node_append_data((yyval.noeud), (yyvsp[-2].chaine)); //Identifiant de la variable cible de l'affectation
 				g_node_append((yyval.noeud), (yyvsp[0].noeud)); //Expression de l'affectation
 			}
-#line 1613 "parser.tab.c"
+#line 1617 "parser.tab.c"
     break;
 
   case 23:
-#line 229 "./bison/parser.y"
+#line 233 "./bison/parser.y"
                                                                               {
 							(yyval.noeud) = g_node_new((gpointer)IF);
 							g_node_append((yyval.noeud), (yyvsp[-3].noeud));
 							g_node_append((yyval.noeud), (yyvsp[-1].noeud));
 						}
-#line 1623 "parser.tab.c"
+#line 1627 "parser.tab.c"
     break;
 
   case 24:
-#line 234 "./bison/parser.y"
+#line 238 "./bison/parser.y"
                                                                                                                                 {
 							(yyval.noeud) = g_node_new((gpointer)IF_ELSE);
 							g_node_append((yyval.noeud), (yyvsp[-5].noeud));
 							g_node_append((yyval.noeud), (yyvsp[-3].noeud));
 							g_node_append((yyval.noeud), (yyvsp[-1].noeud));
 						}
-#line 1634 "parser.tab.c"
+#line 1638 "parser.tab.c"
     break;
 
   case 25:
-#line 242 "./bison/parser.y"
+#line 246 "./bison/parser.y"
                                                                                                             {
 						(yyval.noeud) = g_node_new((gpointer)FOR);
 						g_node_append_data((yyval.noeud), (yyvsp[-7].chaine));
-						g_node_append_data((yyval.noeud), (yyvsp[-5].noeud));
-						g_node_append_data((yyval.noeud), (yyvsp[-3].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-5].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-3].noeud));
 						g_node_append((yyval.noeud), (yyvsp[-1].noeud));
 					}
-#line 1646 "parser.tab.c"
+#line 1650 "parser.tab.c"
     break;
 
   case 26:
-#line 249 "./bison/parser.y"
+#line 253 "./bison/parser.y"
                                                                                                                                                  {
 						(yyval.noeud) = g_node_new((gpointer)FOR_BY_STEP);
 						g_node_append_data((yyval.noeud), (yyvsp[-9].chaine));
-						g_node_append_data((yyval.noeud), (yyvsp[-7].noeud));
-						g_node_append_data((yyval.noeud), (yyvsp[-5].noeud));
-						g_node_append_data((yyval.noeud), (yyvsp[-3].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-7].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-5].noeud));
+						g_node_append((yyval.noeud), (yyvsp[-3].noeud));
 						g_node_append((yyval.noeud), (yyvsp[-1].noeud));
 					}
-#line 1659 "parser.tab.c"
+#line 1663 "parser.tab.c"
     break;
 
   case 27:
-#line 257 "./bison/parser.y"
+#line 261 "./bison/parser.y"
                                                                                                   {
 						(yyval.noeud) = g_node_new((gpointer)WHILE);
 						g_node_append((yyval.noeud), (yyvsp[-3].noeud));
 						g_node_append((yyval.noeud), (yyvsp[-1].noeud));
 					}
-#line 1669 "parser.tab.c"
+#line 1673 "parser.tab.c"
     break;
 
   case 28:
-#line 264 "./bison/parser.y"
+#line 268 "./bison/parser.y"
                                                {
 				(yyval.noeud) = g_node_new((gpointer)ARGUMENTS);
 				g_node_append((yyval.noeud), (yyvsp[-2].noeud));
 				g_node_append((yyval.noeud), (yyvsp[0].noeud));
 			}
-#line 1679 "parser.tab.c"
+#line 1683 "parser.tab.c"
     break;
 
   case 29:
-#line 269 "./bison/parser.y"
+#line 273 "./bison/parser.y"
                                    {
 				(yyval.noeud) = (yyvsp[0].noeud);
 			}
-#line 1687 "parser.tab.c"
+#line 1691 "parser.tab.c"
     break;
 
   case 30:
-#line 274 "./bison/parser.y"
+#line 278 "./bison/parser.y"
                      {
 			(yyval.noeud) = g_node_new((gpointer)ARGUMENT);
 			g_node_append((yyval.noeud), (yyvsp[0].noeud));
 		}
-#line 1696 "parser.tab.c"
+#line 1700 "parser.tab.c"
     break;
 
   case 31:
-#line 278 "./bison/parser.y"
+#line 282 "./bison/parser.y"
                              {
 			(yyval.noeud) = g_node_new((gpointer)ARG_STRING);
 			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
 		}
-#line 1705 "parser.tab.c"
+#line 1709 "parser.tab.c"
     break;
 
   case 32:
-#line 284 "./bison/parser.y"
+#line 288 "./bison/parser.y"
                            {
 				(yyval.noeud) = g_node_new((gpointer)OPERANDE);
 				g_node_append((yyval.noeud), (yyvsp[0].noeud));
 			}
-#line 1714 "parser.tab.c"
+#line 1718 "parser.tab.c"
     break;
 
   case 33:
-#line 288 "./bison/parser.y"
+#line 292 "./bison/parser.y"
                                                      {
 				(yyval.noeud) = g_node_new((gpointer)EXPRESSION);
 				g_node_append((yyval.noeud), (yyvsp[-2].noeud));
 				g_node_append_data((yyval.noeud), (yyvsp[-1].chaine));
 				g_node_append((yyval.noeud), (yyvsp[0].noeud));
 			}
-#line 1725 "parser.tab.c"
+#line 1729 "parser.tab.c"
     break;
 
   case 34:
-#line 294 "./bison/parser.y"
+#line 298 "./bison/parser.y"
                                                        {
 				(yyval.noeud) = g_node_new((gpointer)EXPRESSION_PAR);
 				g_node_append((yyval.noeud), (yyvsp[-1].noeud));
 			}
-#line 1734 "parser.tab.c"
+#line 1738 "parser.tab.c"
     break;
 
   case 35:
-#line 300 "./bison/parser.y"
+#line 304 "./bison/parser.y"
                  {
 			(yyval.noeud) = g_node_new((gpointer)ID);
 			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
 		}
-#line 1743 "parser.tab.c"
+#line 1747 "parser.tab.c"
     break;
 
   case 36:
-#line 304 "./bison/parser.y"
+#line 308 "./bison/parser.y"
                           {
 			(yyval.noeud) = g_node_new((gpointer)ENTIER);
 			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
 		}
-#line 1752 "parser.tab.c"
+#line 1756 "parser.tab.c"
     break;
 
   case 37:
-#line 308 "./bison/parser.y"
+#line 312 "./bison/parser.y"
                             {
 			(yyval.noeud) = g_node_new((gpointer)REEL);
 			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
 		}
-#line 1761 "parser.tab.c"
+#line 1765 "parser.tab.c"
     break;
 
   case 38:
-#line 312 "./bison/parser.y"
+#line 316 "./bison/parser.y"
                            {
 			(yyval.noeud) = g_node_new((gpointer)CARACTERE);
 			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
 		}
-#line 1770 "parser.tab.c"
+#line 1774 "parser.tab.c"
     break;
 
   case 39:
-#line 316 "./bison/parser.y"
+#line 320 "./bison/parser.y"
                            {
 			(yyval.noeud) = g_node_new((gpointer)BOOLEEN);
 			g_node_append_data((yyval.noeud), (yyvsp[0].chaine));
 		}
-#line 1779 "parser.tab.c"
+#line 1783 "parser.tab.c"
     break;
 
 
-#line 1783 "parser.tab.c"
+#line 1787 "parser.tab.c"
 
       default: break;
     }
@@ -2011,14 +2015,16 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 322 "./bison/parser.y"
+#line 326 "./bison/parser.y"
 
 
 int main (int argc, char* argv[]) {
 	
 	init();
 
+	begin_code();
     yyparse();
+	end_code();
 
 	cleanup();
 
@@ -2026,10 +2032,12 @@ int main (int argc, char* argv[]) {
 }
 
 void init() {
-	if( (var_hash_table = g_hash_table_new(g_str_hash, g_str_equal)) == NULL )
+	if( (var_hash_table = g_hash_table_new(g_str_hash, g_str_equal)) == NULL ) {
 		perror("g_hash_table_new");
-	else
-		printf("Table de hachage crée avec succes\n");
+	}
+	else {
+		//printf("Table de hachage crée avec succes\n");
+	}
 }
 
 void cleanup() {
